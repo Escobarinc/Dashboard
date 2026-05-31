@@ -179,6 +179,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .imp-dot{width:8px;height:8px;border-radius:50%;background:var(--danger);flex-shrink:0;margin-top:5px;animation:urgentPulse 1s ease-in-out infinite;box-shadow:0 0 8px var(--danger);}
 .del-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;opacity:0;transition:all 0.18s;padding:2px 5px;border-radius:5px;flex-shrink:0;}
 .ti:hover .del-btn,.fin-row:hover .del-btn,.note-c:hover .del-btn,.lnk-c:hover .del-btn,.wallet-row:hover .del-btn,.meet-item:hover .del-btn,.cal-event:hover .del-btn{opacity:1;}
+.wt-item .del-btn{opacity:0 !important;transition:opacity 0.2s !important;}
+.wt-item:hover .del-btn{opacity:1 !important;}
+.wt-item:hover .del-btn:hover{color:var(--danger) !important;}
 .del-btn:hover{color:var(--danger);background:rgba(239,68,68,0.1);}
 
 /* ═══ TABS ═══ */
@@ -299,15 +302,22 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 /* ═══ OVERVIEW LAYOUT ═══ */
 .ov-layout{display:grid;grid-template-columns:1fr 1.7fr;gap:16px;align-items:start;}
 .ov-left{}
-.ov-right{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:18px;height:calc(100vh - 230px);display:flex;flex-direction:column;}
+.ov-right{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:18px;height:calc(100vh - 240px);display:flex;flex-direction:column;}
 .ov-right:hover{border-color:rgba(139,92,246,0.14);}
-.task-scroll{flex:1;overflow-y:auto;padding-right:4px;}
-.task-scroll::-webkit-scrollbar{width:3px;}
-.task-scroll::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.2);border-radius:2px;}
+.task-scroll{flex:1;overflow-y:auto;padding-right:2px;}
+.task-scroll::-webkit-scrollbar{width:0;background:transparent;}
+.task-scroll{scrollbar-width:none;}
 .ov-stats-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--card-border);flex-wrap:wrap;gap:6px;}
 .ov-stat-item{display:flex;align-items:baseline;gap:5px;}
 .ov-stat-lbl{font-size:12px;color:var(--text3);font-weight:500;}
 .ov-stat-val{font-size:13px;font-weight:700;color:var(--purple);}
+
+/* Panel scroll — hidden scrollbar */
+.panel-scroll{max-height:320px;overflow-y:auto;scrollbar-width:none;}
+.panel-scroll::-webkit-scrollbar{width:0;background:transparent;}
+/* Fade out at bottom of panel */
+.panel-fade{position:relative;}
+.panel-fade::after{content:'';position:absolute;bottom:0;left:0;right:0;height:32px;background:linear-gradient(to bottom,transparent,var(--bg));border-radius:0 0 16px 16px;pointer-events:none;}
 
 /* ═══ CHARTS ═══ */
 .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
@@ -332,15 +342,46 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 /* ═══ MISC ═══ */
 .empty{text-align:center;padding:28px 16px;color:var(--text3);font-size:13px;}
 .empty-ico{font-size:28px;margin-bottom:7px;opacity:0.28;animation:bounce 2s ease-in-out infinite;}
-.scroll-inner{max-height:calc(100vh - 260px);overflow-y:auto;padding-right:2px;}
-.scroll-inner::-webkit-scrollbar{width:3px;}
-.scroll-inner::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.18);border-radius:2px;}
+.scroll-inner{max-height:calc(100vh - 260px);overflow-y:auto;padding-right:2px;scrollbar-width:none;}
+.scroll-inner::-webkit-scrollbar{width:0;background:transparent;}
 .particle{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:particleFloat linear infinite;}
 @keyframes particleFloat{0%{opacity:0;transform:translateY(100vh);}10%{opacity:1;}90%{opacity:1;}100%{opacity:0;transform:translateY(-100px);}}
 
 /* ═══ CONFETTI ═══ */
 .confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:999;animation:confettiFall linear forwards;}
 @keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(100vh) rotate(720deg);}}
+/* ═══ MOBILE ═══ */
+@media (max-width: 768px) {
+  :root{--sidebar-w:0px;}
+  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;z-index:100;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);}
+  .sidebar.open{left:0;box-shadow:0 0 60px rgba(0,0,0,0.8);}
+  .mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99;backdrop-filter:blur(4px);}
+  .mob-overlay.open{display:block;}
+  .mob-menu-btn{display:flex;position:fixed;top:14px;left:14px;z-index:101;width:38px;height:38px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.3);border-radius:10px;align-items:center;justify-content:center;cursor:pointer;font-size:18px;backdrop-filter:blur(10px);}
+  .topbar{padding:14px 16px 12px 62px;}
+  .greeting{font-size:15px;}
+  .topbar-date{font-size:11px;}
+  .scroll-main{padding:14px 14px 80px;}
+  .metrics-grid{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+  .mc{padding:12px;}
+  .mc-val{font-size:18px;}
+  .ov-layout{grid-template-columns:1fr;gap:12px;}
+  .ov-right{height:auto;max-height:60vh;}
+  .charts-row{grid-template-columns:1fr;gap:10px;}
+  .two-col{grid-template-columns:1fr;gap:10px;}
+  .notes-grid{grid-template-columns:1fr;}
+  .links-grid{grid-template-columns:repeat(2,1fr);}
+  .proj-grid{grid-template-columns:1fr;}
+  .modal{width:95vw;padding:20px;}
+  .week-header{flex-direction:column;gap:12px;align-items:flex-start;}
+  .week-stats{gap:14px;}
+  .card{padding:14px;}
+  .card-hd{flex-wrap:wrap;gap:8px;}
+}
+@media (max-width: 400px) {
+  .metrics-grid{grid-template-columns:repeat(2,1fr);}
+  .links-grid{grid-template-columns:1fr 1fr;}
+}
 </style>
 </head>
 <body>
@@ -350,6 +391,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 </div>
 <div class="grid-bg"></div>
 <div class="cursor-glow" id="cursorGlow"></div>
+
+<div class="mob-overlay" id="mob-overlay" onclick="closeMobMenu()"></div>
+<div class="mob-menu-btn" id="mob-menu-btn" onclick="toggleMobMenu()">☰</div>
 
 <div class="app">
 <!-- SIDEBAR -->
@@ -393,6 +437,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
       <span class="nav-lbl">Finance & Ostatní</span>
       <div class="nav-item" onclick="nav('finance',this)"><div class="nav-iw">💰</div>Finance</div>
       <div class="nav-item" onclick="nav('notes',this)"><div class="nav-iw">📝</div>Poznámky</div>
+      <div class="nav-item" onclick="nav('interesting',this)"><div class="nav-iw">💡</div>Zajímavosti</div>
       <div class="nav-item" onclick="nav('links',this)"><div class="nav-iw">🔗</div>Odkazy</div>
     </div>
   </div>
@@ -424,8 +469,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
         <div class="mc c-green"><div class="mc-glow"></div><div class="mc-icon">🤝</div><div class="mc-lbl">SCHŮZKY</div><div class="mc-val" id="ov-m">0</div></div>
       </div>
 
-      <div id="ov-urgent-block"></div>
-
       <!-- CHARTS ROW -->
       <div class="charts-row">
         <div class="chart-card">
@@ -438,28 +481,37 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
         </div>
       </div>
 
-      <!-- MAIN LAYOUT -->
-      <div class="ov-layout">
-        <div class="ov-left">
-          <div class="card">
-            <div class="card-hd"><div class="card-title"><div class="dot dt"></div>Rychlé odkazy</div><span class="lsm" onclick="nav('links',document.querySelectorAll('.nav-item')[9])">Všechny →</span></div>
-            <div id="ov-llist"></div>
-          </div>
+      <!-- MAIN LAYOUT: 4 panels -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1.4fr;gap:14px;align-items:start;">
+
+        <!-- PANEL 1: URGENTNÍ -->
+        <div class="card panel-fade" style="margin-bottom:0;">
+          <div class="card-hd"><div class="card-title"><div class="urgent-dot-nav" style="margin:0;"></div>Urgentní</div><span class="lsm" onclick="nav('urgent',document.querySelectorAll('.nav-item')[1])">Vše →</span></div>
+          <div id="ov-urgent-panel" class="task-list panel-scroll"></div>
         </div>
-        <div class="ov-right">
+
+        <!-- PANEL 2: TÝDENNÍ PLÁN -->
+        <div class="card panel-fade" style="margin-bottom:0;">
+          <div class="card-hd"><div class="card-title"><div class="dot dp"></div>Týdenní plán</div><span class="lsm" onclick="nav('weekly',document.querySelectorAll('.nav-item')[6])">Vše →</span></div>
+          <div id="ov-weekly-panel" class="panel-scroll"></div>
+        </div>
+
+        <!-- PANEL 3: ZAJÍMAVOSTI -->
+        <div class="card panel-fade" style="margin-bottom:0;">
+          <div class="card-hd"><div class="card-title"><div class="dot da"></div>Zajímavosti</div><button class="btn" style="font-size:11px;padding:4px 10px;" onclick="openM('m-interesting')">+</button></div>
+          <div id="ov-interesting-panel" class="panel-scroll"></div>
+        </div>
+
+        <!-- PANEL 4: ÚKOLY -->
+        <div class="ov-right" style="height:auto;max-height:380px;">
           <div class="ov-stats-row">
-            <div class="ov-stat-item">
-              <span class="ov-stat-lbl">Dnešní úkoly</span>
-              <span class="ov-stat-val" id="ov-stat-today">0 z 0 hotových</span>
-            </div>
-            <div class="ov-stat-item">
-              <span class="ov-stat-lbl">Celkové úkoly</span>
-              <span class="ov-stat-val" id="ov-stat-total">0 z 0 hotových</span>
-            </div>
-            <button class="btn btn-primary" style="font-size:12px;padding:6px 12px;" onclick="openM('m-task')">+ Nový úkol</button>
+            <div class="ov-stat-item"><span class="ov-stat-lbl">Dnes</span><span class="ov-stat-val" id="ov-stat-today">0 z 0</span></div>
+            <div class="ov-stat-item"><span class="ov-stat-lbl">Celkem</span><span class="ov-stat-val" id="ov-stat-total">0 z 0</span></div>
+            <button class="btn btn-primary" style="font-size:11px;padding:5px 10px;" onclick="openM('m-task')">+ Úkol</button>
           </div>
           <div class="task-scroll" id="ov-tlist"></div>
         </div>
+
       </div>
     </div>
 
@@ -509,15 +561,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
     <div class="section" id="sec-finance">
       <div class="bal-bar"><div><div class="bal-lbl">Celkový zůstatek (příjmy − výdaje)</div></div><div class="bal-val" id="bal">0 Kč</div></div>
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(20,184,166,0.06);border:1px solid rgba(20,184,166,0.18);border-radius:13px;margin-bottom:12px;">
-        <div><div style="font-size:11px;color:var(--text2);font-weight:500;">Celkem k dispozici</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">zůstatek + účty + v čem mám peníze</div></div>
+        <div><div style="font-size:11px;color:var(--text2);font-weight:500;">Celkem k dispozici</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">zůstatek + účty + hotovost + v čem mám peníze</div></div>
         <div style="font-family:'Inter',sans-serif;font-size:19px;font-weight:800;color:var(--teal)" id="fin-super-val">0 Kč</div>
       </div>
       <div class="two-col" style="margin-bottom:12px;">
         <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dg"></div>Příjmy</div><button class="btn" onclick="openFinM('income')">+ Přidat</button></div><div class="scroll-inner" id="ilist"></div></div>
         <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dr"></div>Výdaje</div><button class="btn" onclick="openFinM('expense')">+ Přidat</button></div><div class="scroll-inner" id="elist"></div></div>
       </div>
-      <div class="two-col">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
         <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot db"></div>Na účtě</div><button class="btn" onclick="openM('m-account')">+ Přidat</button></div><div id="account-list"></div><div class="wallet-total" id="account-total" style="display:none"><span class="wallet-total-lbl">Celkem na účtech</span><span class="wallet-total-val" id="account-total-val" style="color:var(--blue)">0 Kč</span></div></div>
+        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot" style="background:var(--amber);box-shadow:0 0 8px var(--amber)"></div>Hotovost</div><button class="btn" onclick="openM('m-cash')">+ Přidat</button></div><div id="cash-list"></div><div class="wallet-total" id="cash-total" style="display:none"><span class="wallet-total-lbl">Celkem hotovost</span><span class="wallet-total-val" id="cash-total-val" style="color:var(--amber)">0 Kč</span></div></div>
         <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dt"></div>V čem mám peníze</div><button class="btn" onclick="openM('m-wallet')">+ Přidat</button></div><div id="wallet-list"></div><div class="wallet-total" id="wallet-total" style="display:none"><span class="wallet-total-lbl">Celkem uloženo</span><span class="wallet-total-val" id="wallet-total-val">0 Kč</span></div></div>
       </div>
     </div>
@@ -525,6 +578,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
     <!-- NOTES -->
     <div class="section" id="sec-notes">
       <div class="card"><div class="card-hd"><div class="card-title"><div class="dot da"></div>Poznámky</div><button class="btn" onclick="openM('m-note')">+ Nová</button></div><div id="ngrid" class="notes-grid"></div></div>
+    </div>
+
+    <!-- ZAJÍMAVOSTI -->
+    <div class="section" id="sec-interesting">
+      <div class="card"><div class="card-hd"><div class="card-title"><div class="dot da"></div>Zajímavosti</div><button class="btn" onclick="openM('m-interesting')">+ Přidat</button></div><div id="interesting-grid" class="notes-grid"></div></div>
     </div>
 
     <!-- LINKS -->
@@ -543,7 +601,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
     <div class="mf"><label class="ml">Název</label><input class="mi" id="ti-name" placeholder="Co je potřeba udělat?"></div>
     <div class="mf"><label class="ml">Kategorie</label><select class="mi" id="ti-tag"><option value="work">Práce</option><option value="personal">Osobní</option><option value="finance">Finance</option><option value="urgent">🔴 Urgentní</option></select></div>
     <div class="mf"><label class="ml">Projekt</label><select class="mi" id="ti-project"><option value="">— bez projektu —</option></select></div>
-    <div class="mf"><label class="ml">Termín splnění</label><input class="mi" type="datetime-local" id="ti-due"></div>
+    <div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="ti-due-date"></div>
+    <div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="ti-due-time" placeholder="09:00"></div>
+    <div class="mf"><label class="ml">Popis (volitelné)</label><textarea class="mi" id="ti-desc" rows="2" style="resize:vertical" placeholder="Doplňující popis..."></textarea></div>
     <div class="mf" style="display:flex;align-items:center;gap:10px;padding:8px 0;">
       <input type="checkbox" id="ti-important" style="width:16px;height:16px;accent-color:var(--danger);cursor:pointer;">
       <label for="ti-important" style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;font-weight:500;"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);display:inline-block;animation:urgentPulse 1s ease-in-out infinite;"></span>Označit jako DŮLEŽITÉ</label>
@@ -558,12 +618,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 <div class="ov-modal" id="m-note"><div class="modal"><div class="modal-title">📝 Nová poznámka</div><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="ni-title" placeholder="Název"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="ni-content" placeholder="Obsah..." rows="4" style="resize:vertical"></textarea></div><div class="ma"><button class="btn" onclick="closeM('m-note')">Zrušit</button><button class="btn btn-primary" onclick="addNote(this)">Uložit</button></div></div></div>
 <div class="ov-modal" id="m-link"><div class="modal"><div class="modal-title">🔗 Nový odkaz</div><div class="mf"><label class="ml">Název</label><input class="mi" id="li-name" placeholder="GitHub..."></div><div class="mf"><label class="ml">URL</label><input class="mi" id="li-url" placeholder="https://..."></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="li-ico" placeholder="🔗" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="ma"><button class="btn" onclick="closeM('m-link')">Zrušit</button><button class="btn btn-primary" onclick="addLink(this)">Přidat</button></div></div></div>
 <div class="ov-modal" id="m-cal"><div class="modal"><div class="modal-title">📅 Nová událost</div><div class="mf"><label class="ml">Název</label><input class="mi" id="ci-name" placeholder="Název události"></div><div class="mf"><label class="ml">Datum a čas</label><input class="mi" type="datetime-local" id="ci-date"></div><div class="mf"><label class="ml">Barva</label><select class="mi" id="ci-color"><option value="#8b5cf6">Fialová</option><option value="#ec4899">Růžová</option><option value="#14b8a6">Tyrkysová</option><option value="#f59e0b">Žlutá</option><option value="#ef4444">Červená</option><option value="#3b82f6">Modrá</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-cal')">Zrušit</button><button class="btn btn-primary" onclick="addCalEvent(this)">Přidat</button></div></div></div>
-<div class="ov-modal" id="m-meet"><div class="modal"><div class="modal-title">🤝 Nová schůzka</div><div class="mf"><label class="ml">Název</label><input class="mi" id="mi-name" placeholder="Název schůzky"></div><div class="mf"><label class="ml">Datum a čas</label><input class="mi" type="datetime-local" id="mi-date"></div><div class="mf"><label class="ml">Místo / odkaz</label><input class="mi" id="mi-loc" placeholder="Kancelář / Zoom..."></div><div class="ma"><button class="btn" onclick="closeM('m-meet')">Zrušit</button><button class="btn btn-primary" onclick="addMeeting(this)">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-meet"><div class="modal"><div class="modal-title">🤝 Nová schůzka</div><div class="mf"><label class="ml">Název</label><input class="mi" id="mi-name" placeholder="Název schůzky"></div><div class="mf"><label class="ml">S kým</label><input class="mi" id="mi-with" placeholder="Jméno / firma..."></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="mi-date-d"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="mi-date-t"></div><div class="mf"><label class="ml">Místo / odkaz</label><input class="mi" id="mi-loc" placeholder="Kancelář / Zoom..."></div><div class="mf" style="display:flex;align-items:center;gap:10px;padding:8px 0;"><input type="checkbox" id="mi-urgent" style="width:16px;height:16px;accent-color:var(--danger);cursor:pointer;"><label for="mi-urgent" style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;font-weight:500;"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);display:inline-block;animation:urgentPulse 1s ease-in-out infinite;"></span>Urgentní</label></div><div class="ma"><button class="btn" onclick="closeM('m-meet')">Zrušit</button><button class="btn btn-primary" onclick="addMeeting(this)">Přidat</button></div></div></div>
+
+<div class="ov-modal" id="m-edit-meet"><div class="modal"><div class="modal-title">✏️ Upravit schůzku</div><input type="hidden" id="em-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="em-name"></div><div class="mf"><label class="ml">S kým</label><input class="mi" id="em-with"></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="em-date-d"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="em-date-t"></div><div class="mf"><label class="ml">Místo / odkaz</label><input class="mi" id="em-loc"></div><div class="mf" style="display:flex;align-items:center;gap:10px;padding:8px 0;"><input type="checkbox" id="em-urgent" style="width:16px;height:16px;accent-color:var(--danger);cursor:pointer;"><label for="em-urgent" style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;font-weight:500;"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);display:inline-block;animation:urgentPulse 1s ease-in-out infinite;"></span>Urgentní</label></div><div class="ma"><button class="btn" onclick="closeM('m-edit-meet')">Zrušit</button><button class="btn btn-primary" onclick="saveEditMeeting()">Uložit</button></div></div></div>
+
+<div class="ov-modal" id="m-cash"><div class="modal"><div class="modal-title">💵 Hotovost</div><div class="mf"><label class="ml">Popis</label><input class="mi" id="ci2-name" placeholder="Např. Peněženka, Trezor..."></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ci2-amt" placeholder="0"></div><div class="ma"><button class="btn" onclick="closeM('m-cash')">Zrušit</button><button class="btn btn-primary" onclick="addCash(this)">Přidat</button></div></div></div>
+
+<div class="ov-modal" id="m-interesting"><div class="modal"><div class="modal-title">💡 Nová zajímavost</div><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="ii-title" placeholder="Název zajímavosti"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="ii-content" placeholder="Co tě zaujalo..." rows="4" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Zdroj / odkaz (volitelné)</label><input class="mi" id="ii-source" placeholder="https://..."></div><div class="ma"><button class="btn" onclick="closeM('m-interesting')">Zrušit</button><button class="btn btn-primary" onclick="addInteresting(this)">Uložit</button></div></div></div>
+
+<div class="ov-modal" id="m-edit-week-task"><div class="modal"><div class="modal-title">✏️ Upravit úkol týdne</div><input type="hidden" id="ewt-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="ewt-name"></div><div class="mf"><label class="ml">Poznámka / popis</label><textarea class="mi" id="ewt-note" rows="3" style="resize:vertical" placeholder="Doplňující poznámka..."></textarea></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="ewt-due-date"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="ewt-due-time"></div><div class="mf"><label class="ml">Projekt</label><select class="mi" id="ewt-project"><option value="">— bez projektu —</option></select></div><div class="mf" style="display:flex;gap:16px;padding:6px 0;"><label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:500;"><input type="checkbox" id="ewt-urgent" style="width:15px;height:15px;accent-color:var(--danger);"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);display:inline-block;animation:urgentPulse 1s ease-in-out infinite;"></span>Urgentní</label><label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:500;"><input type="checkbox" id="ewt-important" style="width:15px;height:15px;accent-color:var(--danger);">🔴 Důležité</label></div><div class="ma"><button class="btn" onclick="closeM('m-edit-week-task')">Zrušit</button><button class="btn btn-primary" onclick="saveEditWeekTask()">Uložit</button></div></div></div>
+
+<div class="ov-modal" id="m-edit-proj"><div class="modal"><div class="modal-title">✏️ Upravit projekt</div><input type="hidden" id="eproj-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="eproj-name"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="eproj-desc" rows="3" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Stav</label><select class="mi" id="eproj-status"><option value="active">Aktivní</option><option value="paused">Pozastavený</option><option value="done">Dokončený</option></select></div><div class="mf"><label class="ml">Postup (%)</label><input class="mi" type="number" id="eproj-progress" min="0" max="100"></div><div class="mf"><label class="ml">Barva</label><select class="mi" id="eproj-color"><option value="#8b5cf6">Fialová</option><option value="#ec4899">Růžová</option><option value="#14b8a6">Tyrkysová</option><option value="#f59e0b">Žlutá</option><option value="#3b82f6">Modrá</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-edit-proj')">Zrušit</button><button class="btn btn-primary" onclick="saveEditProject()">Uložit</button></div></div></div>
+
+<div class="ov-modal" id="m-edit-cash"><div class="modal"><div class="modal-title">✏️ Upravit hotovost</div><input type="hidden" id="ec-id"><div class="mf"><label class="ml">Popis</label><input class="mi" id="ec-name"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ec-amt"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-cash')">Zrušit</button><button class="btn btn-primary" onclick="saveEditCash()">Uložit</button></div></div></div><div class="modal"><div class="modal-title">✏️ Upravit zajímavost</div><input type="hidden" id="ei-id"><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="ei-title"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="ei-content" rows="4" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Zdroj</label><input class="mi" id="ei-source"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-interesting')">Zrušit</button><button class="btn btn-primary" onclick="saveEditInteresting()">Uložit</button></div></div></div>
 <div class="ov-modal" id="m-proj"><div class="modal"><div class="modal-title">🚀 Nový projekt</div><div class="mf"><label class="ml">Název</label><input class="mi" id="pi-name" placeholder="Název projektu"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="pi-desc" placeholder="Krátký popis..." rows="3" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Stav</label><select class="mi" id="pi-status"><option value="active">Aktivní</option><option value="paused">Pozastavený</option><option value="done">Dokončený</option></select></div><div class="mf"><label class="ml">Postup (%)</label><input class="mi" type="number" id="pi-progress" placeholder="0" min="0" max="100"></div><div class="mf"><label class="ml">Barva</label><select class="mi" id="pi-color"><option value="#8b5cf6">Fialová</option><option value="#ec4899">Růžová</option><option value="#14b8a6">Tyrkysová</option><option value="#f59e0b">Žlutá</option><option value="#3b82f6">Modrá</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-proj')">Zrušit</button><button class="btn btn-primary" onclick="addProject(this)">Přidat</button></div></div></div>
 <div class="ov-modal" id="m-week-setup"><div class="modal"><div class="modal-title">📋 Nastavit týden</div><div class="mf"><label class="ml">Začátek</label><input class="mi" type="date" id="wi-from"></div><div class="mf"><label class="ml">Konec</label><input class="mi" type="date" id="wi-to"></div><div class="ma"><button class="btn" onclick="closeM('m-week-setup')">Zrušit</button><button class="btn btn-primary" onclick="setupWeek()">Nastavit</button></div></div></div>
-<div class="ov-modal" id="m-week-task"><div class="modal"><div class="modal-title">📋 Úkol týdne</div><div class="mf"><label class="ml">Co musím tento týden zvládnout?</label><input class="mi" id="wti-name" placeholder="Název úkolu"></div><div class="ma"><button class="btn" onclick="closeM('m-week-task')">Zrušit</button><button class="btn btn-primary" onclick="addWeekTask()">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-week-task"><div class="modal"><div class="modal-title">📋 Úkol týdne</div><div class="mf"><label class="ml">Název úkolu</label><input class="mi" id="wti-name" placeholder="Co musím tento týden zvládnout?"></div><div class="mf"><label class="ml">Poznámka (volitelné)</label><textarea class="mi" id="wti-note" rows="2" style="resize:vertical" placeholder="Doplňující poznámka..."></textarea></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="wti-due-date"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="wti-due-time"></div><div class="mf"><label class="ml">Projekt</label><select class="mi" id="wti-project"><option value="">— bez projektu —</option></select></div><div class="mf" style="display:flex;gap:16px;padding:6px 0;"><label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:500;"><input type="checkbox" id="wti-urgent" style="width:15px;height:15px;accent-color:var(--danger);"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);display:inline-block;animation:urgentPulse 1s ease-in-out infinite;"></span>Urgentní</label><label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:500;"><input type="checkbox" id="wti-important" style="width:15px;height:15px;accent-color:var(--danger);">🔴 Důležité</label></div><div class="ma"><button class="btn" onclick="closeM('m-week-task')">Zrušit</button><button class="btn btn-primary" onclick="addWeekTask()">Přidat</button></div></div></div>
 
-<div class="ov-modal" id="m-edit-task"><div class="modal"><div class="modal-title">✏️ Upravit úkol</div><input type="hidden" id="et-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="et-name"></div><div class="mf"><label class="ml">Kategorie</label><select class="mi" id="et-tag"><option value="work">Práce</option><option value="personal">Osobní</option><option value="finance">Finance</option><option value="urgent">🔴 Urgentní</option></select></div><div class="mf"><label class="ml">Projekt</label><select class="mi" id="et-project"><option value="">— bez projektu —</option></select></div><div class="mf"><label class="ml">Termín</label><input class="mi" type="datetime-local" id="et-due"></div><div class="mf" style="display:flex;align-items:center;gap:10px;padding:8px 0;"><input type="checkbox" id="et-important" style="width:16px;height:16px;accent-color:var(--danger);cursor:pointer;"><label for="et-important" style="font-size:13px;cursor:pointer;font-weight:500;">🔴 Důležité</label></div><div class="ma"><button class="btn" onclick="closeM('m-edit-task')">Zrušit</button><button class="btn btn-primary" onclick="saveEditTask()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-edit-task"><div class="modal"><div class="modal-title">✏️ Upravit úkol</div><input type="hidden" id="et-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="et-name"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="et-desc" rows="2" style="resize:vertical" placeholder="Doplňující popis..."></textarea></div><div class="mf"><label class="ml">Kategorie</label><select class="mi" id="et-tag"><option value="work">Práce</option><option value="personal">Osobní</option><option value="finance">Finance</option><option value="urgent">🔴 Urgentní</option></select></div><div class="mf"><label class="ml">Projekt</label><select class="mi" id="et-project"><option value="">— bez projektu —</option></select></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="et-due-date"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="et-due-time"></div><div class="mf" style="display:flex;align-items:center;gap:10px;padding:8px 0;"><input type="checkbox" id="et-important" style="width:16px;height:16px;accent-color:var(--danger);cursor:pointer;"><label for="et-important" style="font-size:13px;cursor:pointer;font-weight:500;">🔴 Důležité</label></div><div class="ma"><button class="btn" onclick="closeM('m-edit-task')">Zrušit</button><button class="btn btn-primary" onclick="saveEditTask()">Uložit</button></div></div></div>
 
 <div class="ov-modal" id="m-edit-note"><div class="modal"><div class="modal-title">✏️ Upravit poznámku</div><input type="hidden" id="en-id"><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="en-title"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="en-content" rows="5" style="resize:vertical"></textarea></div><div class="ma"><button class="btn" onclick="closeM('m-edit-note')">Zrušit</button><button class="btn btn-primary" onclick="saveEditNote()">Uložit</button></div></div></div>
 
@@ -590,15 +662,20 @@ const DOC_ID = 'milan';
 // Show loading indicator
 document.getElementById('fb-status').textContent = '⟳ Načítám data...';
 
+// Clean data for Firestore (remove undefined, convert null strings)
+function cleanForFirestore(obj) {
+  return JSON.parse(JSON.stringify(obj, (key, val) => val === undefined ? null : val));
+}
+
 async function fbLoad() {
   try {
     const snap = await getDoc(doc(db, 'workspace', DOC_ID));
     if (snap.exists()) {
       const data = snap.data();
       Object.assign(S, data);
-      ['tasks','finance','notes','links','wallet','events','meetings','projects','accounts'].forEach(k=>{if(!S[k])S[k]=[];});
-      if(!S.currentWeek)S.currentWeek=null;
     }
+    ['tasks','finance','notes','links','wallet','events','meetings','projects','accounts','interesting','cash'].forEach(k=>{if(!S[k])S[k]=[];});
+    if(!S.currentWeek)S.currentWeek=null;
     document.getElementById('fb-status').textContent = '● Online';
     document.getElementById('fb-status').style.color = '#10b981';
   } catch(e) {
@@ -611,10 +688,9 @@ async function fbLoad() {
 }
 
 async function fbSave() {
-  // always save locally too
   localStorage.setItem('mws3', JSON.stringify(S));
   try {
-    await setDoc(doc(db, 'workspace', DOC_ID), S);
+    await setDoc(doc(db, 'workspace', DOC_ID), cleanForFirestore(S));
     document.getElementById('fb-status').textContent = '● Uloženo';
     document.getElementById('fb-status').style.color = '#10b981';
   } catch(e) {
@@ -637,7 +713,7 @@ let finType='income',taskFlt='all';
 const URGENT_H=48;
 let chartIncome=null,chartTasks=null;
 
-function localLoad(){const d=localStorage.getItem('mws3');if(d)Object.assign(S,JSON.parse(d));['tasks','finance','notes','links','wallet','events','meetings','projects','accounts'].forEach(k=>{if(!S[k])S[k]=[];});if(!S.currentWeek)S.currentWeek=null;}
+function localLoad(){const d=localStorage.getItem('mws3');if(d)Object.assign(S,JSON.parse(d));['tasks','finance','notes','links','wallet','events','meetings','projects','accounts','interesting','cash'].forEach(k=>{if(!S[k])S[k]=[];});if(!S.currentWeek)S.currentWeek=null;}
 function load(){localLoad();}
 function save(){if(window.fbSave)window.fbSave();else{localStorage.setItem('mws3',JSON.stringify(S));}}
 
@@ -721,6 +797,14 @@ setInterval(glitch,15000);
 function setDate(){
   const n=new Date(),days=['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'],ms=['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
   document.getElementById('tdate').textContent=days[n.getDay()]+', '+n.getDate()+'. '+ms[n.getMonth()]+' '+n.getFullYear();
+  const h=n.getHours();
+  let pozdrav;
+  if(h>=5&&h<12)pozdrav='Dobré ráno';
+  else if(h>=12&&h<18)pozdrav='Dobré odpoledne';
+  else pozdrav='Dobrý večer';
+  const gel=document.getElementById('greeting');
+  if(gel)gel.innerHTML=`${pozdrav}, <span class="greeting-name">Milane</span> 👋`;
+  gel.dataset.orig=gel.innerHTML;
 }
 function nav(id,el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -743,6 +827,7 @@ function quickAdd(btn){
   else if(a==='sec-meetings')openM('m-meet');
   else if(a==='sec-projects')openM('m-proj');
   else if(a==='sec-weekly')openM('m-week-task');
+  else if(a==='sec-interesting')openM('m-interesting');
   else openM('m-task');
 }
 
@@ -780,7 +865,8 @@ function taskHTML(t,showDel=true){
     ${imp}
     <div class="ti-body">
       <div class="ti-name">${t.name}</div>
-      <div class="ti-meta">${ptag}<span class="tag ${tagCls[t.tag]||'t-work'}">${tagLbl[t.tag]||t.tag}</span>${dl?`<span class="ti-due ${dlSoon&&!t.done?'soon':''}">${dl}</span>`:''}</div>
+      ${t.desc?`<div style="font-size:11px;color:var(--text3);margin-top:2px;line-height:1.4;">${t.desc}</div>`:''}
+      <div class="ti-meta">${ptag}<span class="tag ${tagCls[t.tag]||'t-work'}">${tagLbl[t.tag]||t.tag}</span>${t.due?`<span class="ti-due ${dlSoon&&!t.done?'soon':''}">${dueLabel(t.due)}</span>`:''}</div>
     </div>
     ${showDel?`<button class="del-btn" style="opacity:0.7;font-size:13px;" onclick="openEditTask(${t.id})" title="Upravit">✏️</button><button class="del-btn" onclick="delTask(${t.id})">✕</button>`:''}
   </div>`;
@@ -789,9 +875,14 @@ function taskHTML(t,showDel=true){
 function addTask(btn){
   if(btn&&event)addRipple(btn,event);
   const n=document.getElementById('ti-name').value.trim();if(!n)return;
-  S.tasks.unshift({id:Date.now(),name:n,tag:document.getElementById('ti-tag').value,done:false,due:document.getElementById('ti-due').value||null,project:document.getElementById('ti-project').value||null,important:document.getElementById('ti-important').checked,date:new Date().toISOString()});
+  const dateVal=document.getElementById('ti-due-date').value;
+  const timeVal=document.getElementById('ti-due-time').value||'00:00';
+  const due=dateVal?(dateVal+'T'+timeVal):null;
+  const desc=document.getElementById('ti-desc')?document.getElementById('ti-desc').value.trim()||null:null;
+  S.tasks.unshift({id:Date.now(),name:n,tag:document.getElementById('ti-tag').value,done:false,due,desc,project:document.getElementById('ti-project').value||null,important:document.getElementById('ti-important').checked,date:new Date().toISOString()});
   save();renderAll();closeM('m-task');
-  document.getElementById('ti-name').value='';document.getElementById('ti-due').value='';document.getElementById('ti-important').checked=false;
+  ['ti-name','ti-due-date','ti-due-time','ti-desc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('ti-important').checked=false;
 }
 function togTask(id){
   const t=S.tasks.find(x=>x.id===id);
@@ -808,8 +899,15 @@ function openEditTask(id){
   const t=S.tasks.find(x=>x.id===id);if(!t)return;
   document.getElementById('et-id').value=id;
   document.getElementById('et-name').value=t.name;
+  const dd=document.getElementById('et-desc');if(dd)dd.value=t.desc||'';
   document.getElementById('et-tag').value=t.tag||'work';
-  document.getElementById('et-due').value=t.due||'';
+  if(t.due){
+    document.getElementById('et-due-date').value=t.due.split('T')[0];
+    document.getElementById('et-due-time').value=t.due.split('T')[1]||'00:00';
+  } else {
+    document.getElementById('et-due-date').value='';
+    document.getElementById('et-due-time').value='';
+  }
   document.getElementById('et-important').checked=!!t.important;
   const sel=document.getElementById('et-project');
   sel.innerHTML='<option value="">— bez projektu —</option>';
@@ -820,8 +918,12 @@ function saveEditTask(){
   const id=parseInt(document.getElementById('et-id').value);
   const t=S.tasks.find(x=>x.id===id);if(!t)return;
   const n=document.getElementById('et-name').value.trim();if(!n)return;
-  t.name=n;t.tag=document.getElementById('et-tag').value;
-  t.due=document.getElementById('et-due').value||null;
+  t.name=n;
+  const dd=document.getElementById('et-desc');if(dd)t.desc=dd.value.trim()||null;
+  t.tag=document.getElementById('et-tag').value;
+  const dateVal=document.getElementById('et-due-date').value;
+  const timeVal=document.getElementById('et-due-time').value||'00:00';
+  t.due=dateVal?(dateVal+'T'+timeVal):null;
   t.project=document.getElementById('et-project').value||null;
   t.important=document.getElementById('et-important').checked;
   save();renderAll();closeM('m-edit-task');
@@ -839,8 +941,6 @@ function renderUrgent(){
   if(cnt>0){dot.style.display='block';badge.style.display='inline';badge.textContent=cnt;}else{dot.style.display='none';badge.style.display='none';}
   const ul=document.getElementById('urgent-list');
   if(ul)ul.innerHTML=urg.length?urg.map(t=>taskHTML(t)).join(''):'<div class="empty"><div class="empty-ico">✅</div>Žádné urgentní úkoly</div>';
-  const ob=document.getElementById('ov-urgent-block');
-  if(ob)ob.innerHTML=urg.length>0?`<div class="urgent-card"><div class="urgent-hd"><div class="urgent-dot-nav" style="margin-left:0;margin-right:0;"></div>Urgentní úkoly (${urg.length})</div><div class="task-list">${urg.map(t=>taskHTML(t,false)).join('')}</div></div>`:'' ;
   document.getElementById('ov-u').textContent=cnt;
 }
 
@@ -861,18 +961,25 @@ function renderFinance(){
   const inc=S.finance.filter(f=>f.type==='income'),exp=S.finance.filter(f=>f.type==='expense');
   const ti=inc.reduce((s,f)=>s+f.amount,0),te=exp.reduce((s,f)=>s+f.amount,0),b=ti-te;
   const tw=S.wallet.reduce((s,w)=>s+w.amount,0),ta=S.accounts.reduce((s,a)=>s+a.amount,0);
-  const bel=document.getElementById('bal');bel.textContent=b.toLocaleString('cs-CZ')+' Kč';bel.style.color=b>=0?'var(--success)':'var(--danger)';
-  const sv=document.getElementById('fin-super-val');const st=b+tw+ta;sv.textContent=st.toLocaleString('cs-CZ')+' Kč';sv.style.color=st>=0?'var(--teal)':'var(--danger)';
-  const rL=(arr,el,cls)=>{if(!arr.length){el.innerHTML='<div class="empty"><div class="empty-ico">📭</div>Žádné záznamy</div>';return;}el.innerHTML=arr.map(f=>`<div class="fin-row"><span class="fin-cat">${f.name}</span><div style="display:flex;align-items:center;gap:5px"><span class="fin-amt ${cls}">${cls==='inc'?'+':'-'}${f.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditFin(${f.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delFin(${f.id})">✕</button></div></div>`).join('');};
-  rL(inc,document.getElementById('ilist'),'inc');rL(exp,document.getElementById('elist'),'exp');
-  const al=document.getElementById('account-list'),at2=document.getElementById('account-total'),atv=document.getElementById('account-total-val');
-  if(!S.accounts.length){al.innerHTML='<div class="empty"><div class="empty-ico">🏦</div>Přidej stav účtu</div>';at2.style.display='none';}
-  else{al.innerHTML=S.accounts.map(a=>`<div class="wallet-row"><span class="wallet-name"><span class="wallet-ico">${a.icon}</span>${a.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt" style="color:var(--blue)">${a.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditWallet(${a.id},'account')">✏️</button><button class="del-btn" style="opacity:1" onclick="delAccount(${a.id})">✕</button></div></div>`).join('');at2.style.display='flex';atv.textContent=ta.toLocaleString('cs-CZ')+' Kč';}
-  const wl=document.getElementById('wallet-list'),wt=document.getElementById('wallet-total'),wtv=document.getElementById('wallet-total-val');
-  if(!S.wallet.length){wl.innerHTML='<div class="empty"><div class="empty-ico">💰</div>Přidej kde máš peníze</div>';wt.style.display='none';}
-  else{wl.innerHTML=S.wallet.map(w=>`<div class="wallet-row"><span class="wallet-name"><span class="wallet-ico">${w.icon}</span>${w.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt">${w.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditWallet(${w.id},'wallet')">✏️</button><button class="del-btn" style="opacity:1" onclick="delWallet(${w.id})">✕</button></div></div>`).join('');wt.style.display='flex';wtv.textContent=tw.toLocaleString('cs-CZ')+' Kč';}
-  document.getElementById('ov-i').textContent=ti.toLocaleString('cs-CZ')+' Kč';
-  document.getElementById('ov-e').textContent=te.toLocaleString('cs-CZ')+' Kč';
+  const g=id=>document.getElementById(id);
+  if(g('bal')){g('bal').textContent=b.toLocaleString('cs-CZ')+' Kč';g('bal').style.color=b>=0?'var(--success)':'var(--danger)';}
+  const st=b+tw+ta+(S.cash||[]).reduce((s,c)=>s+c.amount,0);
+  if(g('fin-super-val')){g('fin-super-val').textContent=st.toLocaleString('cs-CZ')+' Kč';g('fin-super-val').style.color=st>=0?'var(--teal)':'var(--danger)';}
+  const rL=(arr,el,cls)=>{if(!el)return;if(!arr.length){el.innerHTML='<div class="empty"><div class="empty-ico">📭</div>Žádné záznamy</div>';return;}el.innerHTML=arr.map(f=>`<div class="fin-row"><span class="fin-cat">${f.name}</span><div style="display:flex;align-items:center;gap:5px"><span class="fin-amt ${cls}">${cls==='inc'?'+':'-'}${f.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditFin(${f.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delFin(${f.id})">✕</button></div></div>`).join('');};
+  rL(inc,g('ilist'),'inc');rL(exp,g('elist'),'exp');
+  const al=g('account-list'),at2=g('account-total'),atv=g('account-total-val');
+  if(al){if(!S.accounts.length){al.innerHTML='<div class="empty"><div class="empty-ico">🏦</div>Přidej stav účtu</div>';if(at2)at2.style.display='none';}
+  else{al.innerHTML=S.accounts.map(a=>`<div class="wallet-row"><span class="wallet-name"><span class="wallet-ico">${a.icon}</span>${a.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt" style="color:var(--blue)">${a.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditWallet(${a.id},'account')">✏️</button><button class="del-btn" style="opacity:1" onclick="delAccount(${a.id})">✕</button></div></div>`).join('');if(at2)at2.style.display='flex';if(atv)atv.textContent=ta.toLocaleString('cs-CZ')+' Kč';}}
+  // cash
+  if(!S.cash)S.cash=[];const tc=(S.cash||[]).reduce((s,c)=>s+c.amount,0);
+  const cl=g('cash-list'),ct=g('cash-total'),ctv=g('cash-total-val');
+  if(cl){if(!S.cash.length){cl.innerHTML='<div class="empty"><div class="empty-ico">💵</div>Přidej hotovost</div>';if(ct)ct.style.display='none';}
+  else{cl.innerHTML=S.cash.map(c=>`<div class="wallet-row"><span class="wallet-name">💵 ${c.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt" style="color:var(--amber)">${c.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditCash(${c.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delCash(${c.id})">✕</button></div></div>`).join('');if(ct)ct.style.display='flex';if(ctv)ctv.textContent=tc.toLocaleString('cs-CZ')+' Kč';}}
+  const wl=g('wallet-list'),wt=g('wallet-total'),wtv=g('wallet-total-val');
+  if(wl){if(!S.wallet.length){wl.innerHTML='<div class="empty"><div class="empty-ico">💰</div>Přidej kde máš peníze</div>';if(wt)wt.style.display='none';}
+  else{wl.innerHTML=S.wallet.map(w=>`<div class="wallet-row"><span class="wallet-name"><span class="wallet-ico">${w.icon}</span>${w.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt">${w.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditWallet(${w.id},'wallet')">✏️</button><button class="del-btn" style="opacity:1" onclick="delWallet(${w.id})">✕</button></div></div>`).join('');if(wt)wt.style.display='flex';if(wtv)wtv.textContent=tw.toLocaleString('cs-CZ')+' Kč';}}
+  if(g('ov-i'))g('ov-i').textContent=ti.toLocaleString('cs-CZ')+' Kč';
+  if(g('ov-e'))g('ov-e').textContent=te.toLocaleString('cs-CZ')+' Kč';
 }
 function addNote(btn){if(btn&&event)addRipple(btn,event);const t=document.getElementById('ni-title').value.trim();const c=document.getElementById('ni-content').value.trim();if(!t)return;S.notes.unshift({id:Date.now(),title:t,content:c,date:new Date().toISOString()});save();renderAll();closeM('m-note');document.getElementById('ni-title').value='';document.getElementById('ni-content').value='';}
 function delNote(id){S.notes=S.notes.filter(x=>x.id!==id);save();renderAll();}
@@ -885,20 +992,225 @@ function renderLinks(){const el=document.getElementById('lgrid');if(!S.links.len
 function addCalEvent(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('ci-name').value.trim();const d=document.getElementById('ci-date').value;const c=document.getElementById('ci-color').value;if(!n||!d)return;S.events.unshift({id:Date.now(),name:n,date:d,color:c});save();renderAll();closeM('m-cal');document.getElementById('ci-name').value='';document.getElementById('ci-date').value='';}
 function delCalEvent(id){S.events=S.events.filter(x=>x.id!==id);save();renderAll();}
 function renderCalendar(){const now=new Date(),year=now.getFullYear(),month=now.getMonth();const firstDay=new Date(year,month,1).getDay(),dim=new Date(year,month+1,0).getDate();const mN=['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];const dN=['Po','Út','St','Čt','Pá','So','Ne'];const evDays=new Set(S.events.filter(e=>{const d=new Date(e.date);return d.getMonth()===month&&d.getFullYear()===year;}).map(e=>new Date(e.date).getDate()));let h=`<div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;margin-bottom:8px;">${mN[month]} ${year}</div><div class="cal-grid">`;dN.forEach(d=>h+=`<div class="cal-head">${d}</div>`);const off=firstDay===0?6:firstDay-1;for(let i=0;i<off;i++)h+=`<div class="cal-day other-month"></div>`;for(let d=1;d<=dim;d++)h+=`<div class="cal-day ${d===now.getDate()?'today':''} ${evDays.has(d)?'has-event':''}">${d}</div>`;h+='</div>';document.getElementById('cal-grid-wrap').innerHTML=h;const sorted=[...S.events].sort((a,b)=>new Date(a.date)-new Date(b.date));document.getElementById('cal-events-list').innerHTML=sorted.length?sorted.map(e=>`<div class="cal-event"><div class="cal-event-dot" style="background:${e.color};box-shadow:0 0 7px ${e.color}"></div><div class="cal-event-info"><div class="cal-event-title">${e.name}</div><div class="cal-event-date">${new Date(e.date).toLocaleDateString('cs-CZ')} ${new Date(e.date).toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})}</div></div><button class="del-btn" onclick="delCalEvent(${e.id})">✕</button></div>`).join(''):'<div class="empty"><div class="empty-ico">📅</div>Žádné události</div>';}
-function addMeeting(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('mi-name').value.trim();const d=document.getElementById('mi-date').value;const l=document.getElementById('mi-loc').value.trim();if(!n||!d)return;S.meetings.unshift({id:Date.now(),name:n,date:d,loc:l});save();renderAll();closeM('m-meet');document.getElementById('mi-name').value='';document.getElementById('mi-date').value='';document.getElementById('mi-loc').value='';}
+function addMeeting(btn){
+  if(btn&&event)addRipple(btn,event);
+  const n=document.getElementById('mi-name').value.trim();
+  const dateVal=document.getElementById('mi-date-d').value;
+  const timeVal=document.getElementById('mi-date-t').value||'00:00';
+  if(!n||!dateVal)return;
+  const d=dateVal+'T'+timeVal;
+  const l=document.getElementById('mi-loc').value.trim();
+  const w=document.getElementById('mi-with').value.trim();
+  const urgent=document.getElementById('mi-urgent').checked;
+  S.meetings.unshift({id:Date.now(),name:n,date:d,loc:l,with:w,urgent});
+  save();renderAll();closeM('m-meet');
+  ['mi-name','mi-date-d','mi-date-t','mi-loc','mi-with'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mi-urgent').checked=false;
+}
 function delMeeting(id){S.meetings=S.meetings.filter(x=>x.id!==id);save();renderAll();}
-function renderMeetings(){const el=document.getElementById('meet-list');const sorted=[...S.meetings].sort((a,b)=>new Date(a.date)-new Date(b.date));el.innerHTML=sorted.length?sorted.map(m=>{const d=new Date(m.date);const ip=d<new Date();return`<div class="meet-item"><div class="meet-time" style="${ip?'color:var(--text3)':''}">${d.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})}</div><div class="meet-info"><div class="meet-title">${m.name}</div><div class="meet-sub">${d.toLocaleDateString('cs-CZ')}${m.loc?' · '+m.loc:''}</div></div><span class="meet-badge">${ip?'Proběhla':'Plánovaná'}</span><button class="del-btn" onclick="delMeeting(${m.id})">✕</button></div>`;}).join(''):'<div class="empty"><div class="empty-ico">🤝</div>Žádné schůzky</div>';}
+function openEditMeeting(id){
+  const m=S.meetings.find(x=>x.id===id);if(!m)return;
+  document.getElementById('em-id').value=id;
+  document.getElementById('em-name').value=m.name;
+  document.getElementById('em-with').value=m.with||'';
+  document.getElementById('em-loc').value=m.loc||'';
+  document.getElementById('em-urgent').checked=!!m.urgent;
+  if(m.date){
+    document.getElementById('em-date-d').value=m.date.split('T')[0];
+    document.getElementById('em-date-t').value=m.date.split('T')[1]||'';
+  } else {
+    document.getElementById('em-date-d').value='';
+    document.getElementById('em-date-t').value='';
+  }
+  openM('m-edit-meet');
+}
+function saveEditMeeting(){
+  const id=parseInt(document.getElementById('em-id').value);
+  const m=S.meetings.find(x=>x.id===id);if(!m)return;
+  m.name=document.getElementById('em-name').value.trim()||m.name;
+  m.with=document.getElementById('em-with').value.trim();
+  m.loc=document.getElementById('em-loc').value.trim();
+  m.urgent=document.getElementById('em-urgent').checked;
+  const dv=document.getElementById('em-date-d').value;
+  const tv=document.getElementById('em-date-t').value||'00:00';
+  if(dv)m.date=dv+'T'+tv;
+  save();renderAll();closeM('m-edit-meet');
+}
+function renderMeetings(){
+  const el=document.getElementById('meet-list');
+  const sorted=[...S.meetings].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  el.innerHTML=sorted.length?sorted.map(m=>{
+    const d=new Date(m.date);const ip=d<new Date();
+    const isToday=d.toDateString()===new Date().toDateString();
+    const greenDot=isToday&&!ip?`<span style="width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);display:inline-block;animation:blink 1.5s ease-in-out infinite;flex-shrink:0;"></span>`:'';
+    return`<div class="meet-item ${m.urgent&&!ip?'is-urgent':''}">
+      <div class="meet-time" style="${ip?'color:var(--text3)':''}">${d.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})}</div>
+      <div class="meet-info">
+        <div class="meet-title" style="display:flex;align-items:center;gap:6px;">${m.urgent&&!ip?'<div class="imp-dot"></div>':''}${greenDot}${m.name}</div>
+        <div class="meet-sub">${d.toLocaleDateString('cs-CZ')}${m.with?' · 👤 '+m.with:''}${m.loc?' · '+m.loc:''}</div>
+      </div>
+      <span class="meet-badge">${ip?'Proběhla':isToday?'Dnes':'Plánovaná'}</span>
+      <button class="del-btn" style="opacity:0.5;font-size:13px;" onclick="openEditMeeting(${m.id})">✏️</button>
+      <button class="del-btn" style="opacity:0.5;" onclick="delMeeting(${m.id})">✕</button>
+    </div>`;
+  }).join(''):'<div class="empty"><div class="empty-ico">🤝</div>Žádné schůzky</div>';
+}
 const pSL={active:'Aktivní',paused:'Pozastavený',done:'Dokončený'};
 const pSC={active:'ps-active',paused:'ps-paused',done:'ps-done'};
 function addProject(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('pi-name').value.trim();if(!n)return;S.projects.unshift({id:Date.now(),name:n,desc:document.getElementById('pi-desc').value.trim(),status:document.getElementById('pi-status').value,progress:Math.min(100,Math.max(0,parseInt(document.getElementById('pi-progress').value)||0)),color:document.getElementById('pi-color').value,date:new Date().toISOString()});save();renderAll();closeM('m-proj');['pi-name','pi-desc','pi-progress'].forEach(id=>document.getElementById(id).value='');}
 function delProject(id){S.projects=S.projects.filter(x=>x.id!==id);save();renderAll();}
-function renderProjects(){const el=document.getElementById('proj-grid');if(!S.projects.length){el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">🚀</div>Žádné projekty</div>';return;}el.innerHTML=S.projects.map(p=>`<div class="proj-c" style="border-top:3px solid ${p.color}"><div class="proj-top"><div class="proj-name">${p.name}</div><div style="display:flex;gap:5px;align-items:center"><span class="proj-status ${pSC[p.status]||'ps-active'}">${pSL[p.status]||p.status}</span><button class="del-btn" style="opacity:1" onclick="delProject(${p.id})">✕</button></div></div>${p.desc?`<div class="proj-desc">${p.desc}</div>`:''}<div class="proj-bar-lbl"><span>Postup</span><span>${p.progress}%</span></div><div class="proj-bar-track"><div class="proj-bar-fill" style="width:${p.progress}%;background:${p.color}"></div></div><div class="proj-footer"><span>${new Date(p.date).toLocaleDateString('cs-CZ')}</span></div></div>`).join('');}
+function openEditProject(id){
+  const p=S.projects.find(x=>x.id===id);if(!p)return;
+  document.getElementById('eproj-id').value=id;
+  document.getElementById('eproj-name').value=p.name;
+  document.getElementById('eproj-desc').value=p.desc||'';
+  document.getElementById('eproj-status').value=p.status||'active';
+  document.getElementById('eproj-progress').value=p.progress||0;
+  document.getElementById('eproj-color').value=p.color||'#8b5cf6';
+  openM('m-edit-proj');
+}
+function saveEditProject(){
+  const id=parseInt(document.getElementById('eproj-id').value);
+  const p=S.projects.find(x=>x.id===id);if(!p)return;
+  p.name=document.getElementById('eproj-name').value.trim()||p.name;
+  p.desc=document.getElementById('eproj-desc').value.trim();
+  p.status=document.getElementById('eproj-status').value;
+  p.progress=Math.min(100,Math.max(0,parseInt(document.getElementById('eproj-progress').value)||0));
+  p.color=document.getElementById('eproj-color').value;
+  save();renderAll();closeM('m-edit-proj');
+}
+function renderProjects(){
+  const el=document.getElementById('proj-grid');
+  if(!S.projects.length){el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">🚀</div>Žádné projekty</div>';return;}
+  el.innerHTML=S.projects.map(p=>`<div class="proj-c" style="border-top:3px solid ${p.color}">
+    <div class="proj-top">
+      <div class="proj-name">${p.name}</div>
+      <div style="display:flex;gap:5px;align-items:center">
+        <span class="proj-status ${pSC[p.status]||'ps-active'}">${pSL[p.status]||p.status}</span>
+        <button class="del-btn" style="opacity:0.6;font-size:13px;" onclick="openEditProject(${p.id})">✏️</button>
+        <button class="del-btn" style="opacity:0.6;" onclick="delProject(${p.id})">✕</button>
+      </div>
+    </div>
+    ${p.desc?`<div class="proj-desc">${p.desc}</div>`:''}
+    <div class="proj-bar-lbl"><span>Postup</span><span>${p.progress}%</span></div>
+    <div class="proj-bar-track"><div class="proj-bar-fill" style="width:${p.progress}%;background:${p.color}"></div></div>
+    <div class="proj-footer"><span>${new Date(p.date).toLocaleDateString('cs-CZ')}</span></div>
+  </div>`).join('');
+}
 function setupWeek(){const from=document.getElementById('wi-from').value;const to=document.getElementById('wi-to').value;if(!from||!to)return;S.currentWeek={from,to,tasks:[]};save();renderAll();closeM('m-week-setup');}
-function addWeekTask(){const n=document.getElementById('wti-name').value.trim();if(!n||!S.currentWeek)return;S.currentWeek.tasks.push({id:Date.now(),name:n,done:false});save();renderAll();closeM('m-week-task');document.getElementById('wti-name').value='';}
+function addWeekTask(){
+  const n=document.getElementById('wti-name').value.trim();if(!n||!S.currentWeek)return;
+  const dateVal=document.getElementById('wti-due-date').value;
+  const timeVal=document.getElementById('wti-due-time').value||'00:00';
+  const due=dateVal?(dateVal+'T'+timeVal):null;
+  const note=document.getElementById('wti-note')?document.getElementById('wti-note').value.trim()||null:null;
+  const proj=document.getElementById('wti-project').value||null;
+  const urgent=document.getElementById('wti-urgent').checked;
+  const important=document.getElementById('wti-important').checked;
+  S.currentWeek.tasks.push({id:Date.now(),name:n,done:false,due,note,project:proj,urgent,important,date:new Date().toISOString()});
+  S.currentWeek.tasks.sort((a,b)=>{if(a.due&&b.due)return new Date(a.due)-new Date(b.due);if(a.due)return -1;if(b.due)return 1;return 0;});
+  save();renderAll();closeM('m-week-task');
+  ['wti-name','wti-due-date','wti-due-time','wti-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['wti-urgent','wti-important'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+  const sel=document.getElementById('wti-project');if(sel){sel.innerHTML='<option value="">— bez projektu —</option>';(S.projects||[]).filter(p=>p.status!=='done').forEach(p=>{const o=document.createElement('option');o.value=p.name;o.textContent=p.name;sel.appendChild(o);});}
+}
+function openEditWeekTask(id){
+  if(!S.currentWeek)return;
+  const t=S.currentWeek.tasks.find(x=>x.id===id);if(!t)return;
+  document.getElementById('ewt-id').value=id;
+  document.getElementById('ewt-name').value=t.name;
+  document.getElementById('ewt-note').value=t.note||'';
+  if(t.due){
+    document.getElementById('ewt-due-date').value=t.due.split('T')[0];
+    document.getElementById('ewt-due-time').value=t.due.split('T')[1]||'';
+  } else {
+    document.getElementById('ewt-due-date').value='';
+    document.getElementById('ewt-due-time').value='';
+  }
+  document.getElementById('ewt-urgent').checked=!!t.urgent;
+  document.getElementById('ewt-important').checked=!!t.important;
+  const sel=document.getElementById('ewt-project');
+  sel.innerHTML='<option value="">— bez projektu —</option>';
+  (S.projects||[]).filter(p=>p.status!=='done').forEach(p=>{const o=document.createElement('option');o.value=p.name;o.textContent=p.name;if(p.name===t.project)o.selected=true;sel.appendChild(o);});
+  openM('m-edit-week-task');
+}
+function saveEditWeekTask(){
+  if(!S.currentWeek)return;
+  const id=parseInt(document.getElementById('ewt-id').value);
+  const t=S.currentWeek.tasks.find(x=>x.id===id);if(!t)return;
+  t.name=document.getElementById('ewt-name').value.trim()||t.name;
+  t.note=document.getElementById('ewt-note').value.trim()||null;
+  const dateVal=document.getElementById('ewt-due-date').value;
+  const timeVal=document.getElementById('ewt-due-time').value||'00:00';
+  t.due=dateVal?(dateVal+'T'+timeVal):null;
+  t.project=document.getElementById('ewt-project').value||null;
+  t.urgent=document.getElementById('ewt-urgent').checked;
+  t.important=document.getElementById('ewt-important').checked;
+  S.currentWeek.tasks.sort((a,b)=>{if(a.due&&b.due)return new Date(a.due)-new Date(b.due);if(a.due)return -1;if(b.due)return 1;return 0;});
+  save();renderAll();closeM('m-edit-week-task');
+}
+// Sync: tasks with due date in current week appear in weekly panel
+function getWeekTasks(){
+  if(!S.currentWeek)return[];
+  const from=new Date(S.currentWeek.from+'T00:00:00');
+  const to=new Date(S.currentWeek.to+'T23:59:59');
+  return S.tasks.filter(t=>t.due&&!t.done&&new Date(t.due)>=from&&new Date(t.due)<=to);
+}
+function getWeekMeetings(){
+  if(!S.currentWeek)return[];
+  const from=new Date(S.currentWeek.from+'T00:00:00');
+  const to=new Date(S.currentWeek.to+'T23:59:59');
+  return S.meetings.filter(m=>m.date&&new Date(m.date)>=from&&new Date(m.date)<=to);
+}
 function togWeekTask(id){if(!S.currentWeek)return;const t=S.currentWeek.tasks.find(x=>x.id===id);if(t){t.done=!t.done;save();renderAll();}}
 function delWeekTask(id){if(!S.currentWeek)return;S.currentWeek.tasks=S.currentWeek.tasks.filter(x=>x.id!==id);save();renderAll();}
 function fmtD(ds){const d=new Date(ds+'T00:00:00');return d.toLocaleDateString('cs-CZ',{day:'numeric',month:'long'});}
-function renderWeekly(){const el=document.getElementById('weekly-content');if(!S.currentWeek){el.innerHTML=`<div class="card"><div class="no-week"><div class="no-week-ico">📋</div><div style="font-size:15px;font-weight:700;margin-bottom:6px;">Žádný týden není nastaven</div><div style="font-size:13px;color:var(--text3);margin-bottom:16px;">Nastav rozsah týdne a přidávej bezpodmínečné úkoly.</div><button class="btn btn-primary" style="display:block;margin:0 auto" onclick="openM('m-week-setup')">Nastavit týden</button></div></div>`;return;}const tasks=S.currentWeek.tasks||[];const done=tasks.filter(t=>t.done).length;const total=tasks.length;const pct=total?Math.round(done/total*100):0;el.innerHTML=`<div class="week-header"><div><div class="week-range">📋 ${fmtD(S.currentWeek.from)} — ${fmtD(S.currentWeek.to)}</div><div class="week-range-sub">Bezpodmínečné úkoly tohoto týdne</div></div><div class="week-stats"><div class="week-stat"><div class="week-stat-val" style="color:var(--success)">${done}</div><div class="week-stat-lbl">Splněno</div></div><div class="week-stat"><div class="week-stat-val" style="color:var(--purple)">${total}</div><div class="week-stat-lbl">Celkem</div></div><div class="week-stat"><div class="week-stat-val" style="color:var(--amber)">${pct}%</div><div class="week-stat-lbl">Postup</div></div></div></div><div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dp"></div>Úkoly týdne</div><div style="display:flex;gap:8px"><button class="btn" onclick="openM('m-week-setup')">Změnit týden</button><button class="btn btn-primary" onclick="openM('m-week-task')">+ Přidat</button></div></div><div class="week-progress"><div class="week-progress-fill" style="width:${pct}%"></div></div><div class="task-list">${tasks.length?tasks.map((t,i)=>`<div class="wt-item ${t.done?'done':''}"><span class="wt-num">${i+1}.</span><div class="wt-chk ${t.done?'on':''}" onclick="togWeekTask(${t.id})"></div><span class="wt-text">${t.name}</span><button class="del-btn" onclick="delWeekTask(${t.id})">✕</button></div>`).join(''):'<div class="empty"><div class="empty-ico">📋</div>Přidej první úkol</div>'}</div></div>`;}
+function renderWeekly(){
+  const el=document.getElementById('weekly-content');
+  const sel=document.getElementById('wti-project');
+  if(sel){sel.innerHTML='<option value="">— bez projektu —</option>';(S.projects||[]).filter(p=>p.status!=='done').forEach(p=>{const o=document.createElement('option');o.value=p.name;o.textContent=p.name;sel.appendChild(o);});}
+  if(!S.currentWeek){el.innerHTML=`<div class="card"><div class="no-week"><div class="no-week-ico">📋</div><div style="font-size:15px;font-weight:700;margin-bottom:6px;">Žádný týden není nastaven</div><div style="font-size:13px;color:var(--text3);margin-bottom:16px;">Nastav rozsah týdne a přidávej bezpodmínečné úkoly.</div><button class="btn btn-primary" style="display:block;margin:0 auto" onclick="openM('m-week-setup')">Nastavit týden</button></div></div>`;return;}
+  const ownTasks=S.currentWeek.tasks||[];
+  const syncedTasks=getWeekTasks().filter(st=>!ownTasks.find(ot=>ot.name===st.name));
+  const weekMeetings=getWeekMeetings().map(m=>({...m,_meeting:true,due:m.date,name:'🤝 '+m.name+(m.with?' ('+m.with+')':'')}));
+  const allTasks=[...ownTasks,...syncedTasks.map(t=>({...t,_synced:true})),...weekMeetings];
+  allTasks.sort((a,b)=>{if(a.due&&b.due)return new Date(a.due)-new Date(b.due);if(a.due)return -1;if(b.due)return 1;return 0;});
+  const done=allTasks.filter(t=>t.done).length;const total=allTasks.length;const pct=total?Math.round(done/total*100):0;
+  const taskHTML2=t=>{
+    if(t._meeting){
+      const d=new Date(t.due);
+      const greenDot=`<span style="width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);display:inline-block;animation:blink 1.5s ease-in-out infinite;flex-shrink:0;"></span>`;
+      return`<div class="wt-item">
+        ${greenDot}
+        <div style="flex:1;min-width:0;">
+          <div class="wt-text">${t.name}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px;">${d.toLocaleDateString('cs-CZ')} ${d.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})}</div>
+        </div>
+        <button class="del-btn" style="opacity:0.5;font-size:13px;" onclick="openEditMeeting(${t.id})">✏️</button>
+      </div>`;
+    }
+    const pc=getProjColor(t.project);
+    const ptag=t.project?`<span class="proj-tag" style="background:${pc?pc+'22':'rgba(139,92,246,0.14)'};color:${pc||'#c4b5fd'};border-color:${pc?pc+'44':'rgba(139,92,246,0.22)'}">${t.project}</span>`:'';
+    const dl=t.due?`<span class="ti-due ${(new Date(t.due)-new Date())/(1000*60*60)<=48&&!t.done?'soon':''}">${dueLabel(t.due)}</span>`:'';
+    const urgDot=t.urgent&&!t.done?`<div class="imp-dot"></div>`:'';
+    const impDot=t.important&&!t.done?`<span style="font-size:10px;color:var(--danger);">🔴</span>`:'';
+    const syncBadge=t._synced?`<span style="font-size:9px;background:rgba(20,184,166,0.15);color:var(--teal);padding:1px 6px;border-radius:10px;">↔ z úkolů</span>`:'';
+    const noteStr=t.note||t.desc;
+    return`<div class="wt-item ${t.done?'done':''}">
+      <div class="wt-chk ${t.done?'on':''}" onclick="${t._synced?`togTask(${t.id})`:`togWeekTask(${t.id})`}"></div>
+      ${urgDot}${impDot}
+      <div style="flex:1;min-width:0;">
+        <div class="wt-text">${t.name} ${syncBadge}</div>
+        ${noteStr?`<div style="font-size:11px;color:var(--text3);margin-top:2px;line-height:1.4;">${noteStr}</div>`:''}
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px;">${ptag}${dl}</div>
+      </div>
+      ${!t._synced&&!t._meeting?`<button class="del-btn" onclick="openEditWeekTask(${t.id})">✏️</button><button class="del-btn" onclick="delWeekTask(${t.id})">✕</button>`:
+      t._meeting?`<button class="del-btn" onclick="openEditMeeting(${t.id})">✏️</button>`:
+      `<button class="del-btn" onclick="openEditTask(${t.id})">✏️</button>`}
+    </div>`;
+  };
+  el.innerHTML=`<div class="week-header"><div><div class="week-range">📋 ${fmtD(S.currentWeek.from)} — ${fmtD(S.currentWeek.to)}</div><div class="week-range-sub">Bezpodmínečné úkoly + úkoly z tohoto týdne</div></div><div class="week-stats"><div class="week-stat"><div class="week-stat-val" style="color:var(--success)">${done}</div><div class="week-stat-lbl">Splněno</div></div><div class="week-stat"><div class="week-stat-val" style="color:var(--purple)">${total}</div><div class="week-stat-lbl">Celkem</div></div><div class="week-stat"><div class="week-stat-val" style="color:var(--amber)">${pct}%</div><div class="week-stat-lbl">Postup</div></div></div></div><div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dp"></div>Úkoly týdne</div><div style="display:flex;gap:8px"><button class="btn" onclick="openM('m-week-setup')">Změnit týden</button><button class="btn btn-primary" onclick="openM('m-week-task')">+ Přidat</button></div></div><div class="week-progress"><div class="week-progress-fill" style="width:${pct}%"></div></div><div class="task-list">${allTasks.length?allTasks.map(t=>taskHTML2(t)).join(''):'<div class="empty"><div class="empty-ico">📋</div>Přidej první úkol</div>'}</div></div>`;
+}
 function renderCharts(){
   const months=['Led','Úno','Bře','Dub','Kvě','Čvn','Čvc','Srp','Zář','Říj','Lis','Pro'];
   const incByMonth=Array(12).fill(0);
@@ -918,28 +1230,110 @@ function renderOverview(){
   const now=new Date(),todayStr=now.toDateString();
   const all=S.tasks,active=all.filter(t=>!t.done).length;
   const todayTasks=all.filter(t=>new Date(t.date).toDateString()===todayStr);
-  document.getElementById('ov-t').textContent=active;
-  document.getElementById('tbadge').textContent=active;
-  document.getElementById('ov-today-badge').textContent=`▲ ${todayTasks.length} dnes`;
-  document.getElementById('ov-n').textContent=S.notes.length;
-  document.getElementById('ov-p').textContent=(S.projects||[]).filter(p=>p.status==='active').length;
-  document.getElementById('ov-m').textContent=S.meetings.filter(m=>new Date(m.date)>now).length;
-  document.getElementById('ov-stat-today').textContent=`${todayTasks.filter(t=>t.done).length} z ${todayTasks.length} hotových`;
-  document.getElementById('ov-stat-total').textContent=`${all.filter(t=>t.done).length} z ${all.length} hotových`;
+  const g=id=>{const el=document.getElementById(id);return el;};
+  const s=(id,val)=>{const el=g(id);if(el)el.textContent=val;};
+  s('ov-t',active);
+  s('tbadge',active);
+  s('ov-today-badge',`▲ ${todayTasks.length} dnes`);
+  s('ov-n',S.notes.length);
+  s('ov-p',(S.projects||[]).filter(p=>p.status==='active').length);
+  s('ov-m',S.meetings.filter(m=>new Date(m.date)>now).length);
+  s('ov-stat-today',`${todayTasks.filter(t=>t.done).length} z ${todayTasks.length} hotových`);
+  s('ov-stat-total',`${all.filter(t=>t.done).length} z ${all.length} hotových`);
   const ti=S.finance.filter(f=>f.type==='income').reduce((s,f)=>s+f.amount,0);
   const te=S.finance.filter(f=>f.type==='expense').reduce((s,f)=>s+f.amount,0);
-  document.getElementById('ov-i').textContent=ti.toLocaleString('cs-CZ')+' Kč';
-  document.getElementById('ov-e').textContent=te.toLocaleString('cs-CZ')+' Kč';
+  s('ov-i',ti.toLocaleString('cs-CZ')+' Kč');
+  s('ov-e',te.toLocaleString('cs-CZ')+' Kč');
   const sorted=[...all].sort((a,b)=>{if(a.due&&b.due)return new Date(a.due)-new Date(b.due);if(a.due)return -1;if(b.due)return 1;return new Date(b.date)-new Date(a.date);});
-  document.getElementById('ov-tlist').innerHTML=sorted.length?sorted.map(t=>taskHTML(t,true)).join(''):'<div class="empty"><div class="empty-ico">📭</div>Žádné úkoly — přidej první</div>';
+  const tlist=g('ov-tlist');if(tlist)tlist.innerHTML=sorted.length?sorted.map(t=>taskHTML(t,true)).join(''):'<div class="empty"><div class="empty-ico">📭</div>Žádné úkoly — přidej první</div>';
+
+  // urgent panel
+  const urgTasks=S.tasks.filter(t=>isUrgent(t)&&!t.done);
+  const up=g('ov-urgent-panel');
+  if(up)up.innerHTML=urgTasks.length?urgTasks.map(t=>taskHTML(t,false)).join(''):'<div class="empty"><div class="empty-ico">✅</div>Žádné urgentní</div>';
+
+  // weekly panel
+  const wp=g('ov-weekly-panel');
+  if(wp){
+    if(!S.currentWeek){wp.innerHTML='<div class="empty"><div class="empty-ico">📋</div>Týden není nastaven</div>';}
+    else{
+      const ownT=S.currentWeek.tasks||[];
+      const syncT=getWeekTasks().filter(st=>!ownT.find(ot=>ot.name===st.name));
+      const weekM=getWeekMeetings().map(m=>({...m,_meeting:true,due:m.date,name:'🤝 '+m.name+(m.with?' ('+m.with+')':'')}));
+      const allT=[...ownT,...syncT.map(t=>({...t,_synced:true})),...weekM].sort((a,b)=>{if(a.due&&b.due)return new Date(a.due)-new Date(b.due);if(a.due)return -1;if(b.due)return 1;return 0;});
+      const wd=allT.filter(t=>t.done||t._meeting).length;const wpc=allT.length?Math.round(wd/allT.length*100):0;
+      const greenDot=`<span style="width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 6px var(--success);display:inline-block;animation:blink 1.5s ease-in-out infinite;flex-shrink:0;margin-right:3px;"></span>`;
+      wp.innerHTML=`<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:6px;"><span>${allT.filter(t=>t.done).length}/${allT.length} splněno</span><span style="color:var(--amber)">${wpc}%</span></div><div style="height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin-bottom:8px;"><div style="height:100%;width:${wpc}%;background:linear-gradient(90deg,var(--purple),var(--teal));border-radius:2px;"></div></div>${allT.length?allT.map(t=>`<div class="wt-item ${t.done?'done':''}" style="margin-bottom:4px;">${t._meeting?greenDot:`<div class="wt-chk ${t.done?'on':''}" onclick="${t._synced?`togTask(${t.id})`:`togWeekTask(${t.id})`}"></div>`}${t.urgent&&!t.done&&!t._meeting?'<div class="imp-dot"></div>':''}<div style="flex:1;min-width:0;"><span class="wt-text">${t.name}</span>${t.due?`<div style="font-size:10px;color:var(--text3)">${dueLabel(t.due)}</div>`:''}</div></div>`).join(''):'<div class="empty"><div class="empty-ico">📋</div>Přidej úkoly</div>'}`;
+    }
+  }
+
   const ls=S.links.slice(0,6);
-  document.getElementById('ov-llist').innerHTML=ls.length?ls.map(l=>`<div class="fin-row" style="cursor:pointer" onclick="window.open('${l.url}','_blank')"><span>${l.icon} ${l.name}</span><span style="font-size:11px;color:var(--text3)">${l.url.replace(/https?:\/\//,'').split('/')[0]}</span></div>`).join(''):'<div class="empty"><div class="empty-ico">🔗</div>Žádné odkazy</div>';
-  const sel=document.getElementById('ti-project');
+  const llist=g('ov-llist');if(llist)llist.innerHTML=ls.length?ls.map(l=>`<div class="fin-row" style="cursor:pointer" onclick="window.open('${l.url}','_blank')"><span>${l.icon} ${l.name}</span><span style="font-size:11px;color:var(--text3)">${l.url.replace(/https?:\/\//,'').split('/')[0]}</span></div>`).join(''):'<div class="empty"><div class="empty-ico">🔗</div>Žádné odkazy</div>';
+  const sel=g('ti-project');
   if(sel){const cur=sel.value;sel.innerHTML='<option value="">— bez projektu —</option>';(S.projects||[]).filter(p=>p.status!=='done').forEach(p=>{const o=document.createElement('option');o.value=p.name;o.textContent=p.name;if(p.name===cur)o.selected=true;sel.appendChild(o);});}
   renderCharts();
 }
-function renderAll(){renderOverview();renderUrgent();renderTasks();renderFinance();renderNotes();renderLinks();renderCalendar();renderMeetings();renderProjects();renderWeekly();}
+function renderAll(){renderOverview();renderUrgent();renderTasks();renderFinance();renderNotes();renderLinks();renderCalendar();renderMeetings();renderProjects();renderWeekly();renderInteresting();}
 function spawnParticles(){const colors=['rgba(139,92,246,0.7)','rgba(236,72,153,0.6)','rgba(20,184,166,0.5)','rgba(245,158,11,0.5)'];for(let i=0;i<14;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*3+1;p.style.cssText=`left:${Math.random()*100}%;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${8+Math.random()*14}s;animation-delay:-${Math.random()*12}s;box-shadow:0 0 6px ${colors[Math.floor(Math.random()*colors.length)]}`;document.body.appendChild(p);}}
+// ═══ CASH ═══
+function addCash(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('ci2-name').value.trim();const a=parseFloat(document.getElementById('ci2-amt').value);if(!n||!a)return;if(!S.cash)S.cash=[];S.cash.unshift({id:Date.now(),name:n,amount:a});save();renderAll();closeM('m-cash');document.getElementById('ci2-name').value='';document.getElementById('ci2-amt').value='';}
+function delCash(id){if(!S.cash)return;S.cash=S.cash.filter(x=>x.id!==id);save();renderAll();}
+function openEditCash(id){
+  if(!S.cash)return;const c=S.cash.find(x=>x.id===id);if(!c)return;
+  document.getElementById('ec-id').value=id;
+  document.getElementById('ec-name').value=c.name;
+  document.getElementById('ec-amt').value=c.amount;
+  openM('m-edit-cash');
+}
+function saveEditCash(){
+  if(!S.cash)return;
+  const id=parseInt(document.getElementById('ec-id').value);
+  const c=S.cash.find(x=>x.id===id);if(!c)return;
+  c.name=document.getElementById('ec-name').value.trim()||c.name;
+  c.amount=parseFloat(document.getElementById('ec-amt').value)||c.amount;
+  save();renderAll();closeM('m-edit-cash');
+}
+function addInteresting(btn){if(btn&&event)addRipple(btn,event);const t=document.getElementById('ii-title').value.trim();const c=document.getElementById('ii-content').value.trim();const s=document.getElementById('ii-source').value.trim();if(!t)return;if(!S.interesting)S.interesting=[];S.interesting.unshift({id:Date.now(),title:t,content:c,source:s,date:new Date().toISOString()});save();renderAll();closeM('m-interesting');document.getElementById('ii-title').value='';document.getElementById('ii-content').value='';document.getElementById('ii-source').value='';}
+function delInteresting(id){if(!S.interesting)return;S.interesting=S.interesting.filter(x=>x.id!==id);save();renderAll();}
+function openEditInteresting(id){if(!S.interesting)return;const item=S.interesting.find(x=>x.id===id);if(!item)return;document.getElementById('ei-id').value=id;document.getElementById('ei-title').value=item.title;document.getElementById('ei-content').value=item.content||'';document.getElementById('ei-source').value=item.source||'';openM('m-edit-interesting');}
+function saveEditInteresting(){const id=parseInt(document.getElementById('ei-id').value);if(!S.interesting)return;const item=S.interesting.find(x=>x.id===id);if(!item)return;item.title=document.getElementById('ei-title').value.trim();item.content=document.getElementById('ei-content').value.trim();item.source=document.getElementById('ei-source').value.trim();save();renderAll();closeM('m-edit-interesting');}
+function renderInteresting(){
+  if(!S.interesting)S.interesting=[];
+  const grid=document.getElementById('interesting-grid');
+  const panel=document.getElementById('ov-interesting-panel');
+  const html=S.interesting.length?S.interesting.map(i=>`
+    <div class="note-c">
+      <div class="note-t">💡 ${i.title}<div style="display:flex;gap:4px"><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditInteresting(${i.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delInteresting(${i.id})">✕</button></div></div>
+      <div class="note-p">${i.content||''}</div>
+      ${i.source?`<div style="margin-top:6px;font-size:10px;color:var(--purple);cursor:pointer;" onclick="window.open('${i.source}','_blank')">🔗 ${i.source.replace(/https?:\/\//,'').split('/')[0]}</div>`:''}
+      <div class="note-d">${new Date(i.date).toLocaleDateString('cs-CZ')}</div>
+    </div>`).join(''):'<div class="empty" style="grid-column:1/-1"><div class="empty-ico">💡</div>Žádné zajímavosti</div>';
+  if(grid)grid.innerHTML=html;
+  if(panel){
+    if(!S.interesting.length){panel.innerHTML='<div class="empty"><div class="empty-ico">💡</div>Žádné zajímavosti</div>';return;}
+    panel.innerHTML=S.interesting.map(i=>`<div class="fin-row" style="flex-direction:column;align-items:flex-start;gap:3px;cursor:default"><div style="font-size:13px;font-weight:500;">💡 ${i.title}</div>${i.content?`<div style="font-size:11px;color:var(--text3);line-height:1.4;">${i.content.substring(0,80)}${i.content.length>80?'…':''}</div>`:''}</div>`).join('');
+  }
+}
+function toggleMobMenu(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('mob-overlay').classList.toggle('open');
+}
+function closeMobMenu(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('open');
+}
+// Close sidebar on nav click on mobile
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    if(window.innerWidth<=768)closeMobMenu();
+  });
+});
+
+// ═══ SERVICE WORKER ═══
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.ov-modal').forEach(m=>m.classList.remove('open'));});
 setInterval(renderAll,60000);
 load();setDate();renderAll();spawnParticles();
