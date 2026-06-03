@@ -353,10 +353,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 /* ═══ MOBILE ═══ */
 @media (max-width: 768px) {
   :root{--sidebar-w:0px;}
-  .sidebar{position:fixed;left:-240px;top:0;bottom:0;width:240px;z-index:100;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);}
-  .sidebar.open{left:0;box-shadow:0 0 60px rgba(0,0,0,0.8);}
-  .mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99;backdrop-filter:blur(4px);}
-  .mob-overlay.open{display:block;}
+  .sidebar{position:fixed;left:-260px;top:0;bottom:0;width:240px;z-index:999;transition:left 0.3s cubic-bezier(0.4,0,0.2,1);background:#0d0d20 !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;overflow-y:auto !important;-webkit-overflow-scrolling:touch;}
+  .sidebar.open{left:0;box-shadow:4px 0 40px rgba(0,0,0,0.95);}
+  .mob-overlay{display:none !important;}
+  .mob-menu-btn{z-index:1000;}
   .mob-menu-btn{display:flex;position:fixed;top:14px;left:14px;z-index:101;width:38px;height:38px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.3);border-radius:10px;align-items:center;justify-content:center;cursor:pointer;font-size:18px;backdrop-filter:blur(10px);}
   .topbar{padding:14px 16px 12px 62px;}
   .greeting{font-size:15px;}
@@ -462,7 +462,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
       <div class="metrics-grid">
         <div class="mc c-purple"><div class="mc-glow"></div><div class="mc-icon">✅</div><div class="mc-lbl">OTEVŘENÉ ÚKOLY</div><div class="mc-val" id="ov-t">0</div><div class="mc-badge" id="ov-today-badge">▲ 0 dnes</div></div>
         <div class="mc c-red"><div class="mc-glow"></div><div class="mc-icon">🚨</div><div class="mc-lbl">URGENTNÍ</div><div class="mc-val" id="ov-u">0</div><div class="mc-sub dn">do 48h</div></div>
-        <div class="mc c-teal"><div class="mc-glow"></div><div class="mc-icon">💚</div><div class="mc-lbl">PŘÍJMY</div><div class="mc-val" id="ov-i">0 Kč</div></div>
+        <div class="mc c-teal"><div class="mc-glow"></div><div class="mc-icon">💚</div><div class="mc-lbl">K DISPOZICI</div><div class="mc-val" id="ov-i">0 Kč</div></div>
         <div class="mc c-pink"><div class="mc-glow"></div><div class="mc-icon">💸</div><div class="mc-lbl">VÝDAJE</div><div class="mc-val" id="ov-e">0 Kč</div></div>
         <div class="mc c-amber"><div class="mc-glow"></div><div class="mc-icon">📝</div><div class="mc-lbl">POZNÁMKY</div><div class="mc-val" id="ov-n">0</div></div>
         <div class="mc c-blue"><div class="mc-glow"></div><div class="mc-icon">🚀</div><div class="mc-lbl">PROJEKTY</div><div class="mc-val" id="ov-p">0</div></div>
@@ -525,14 +525,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 
     <!-- TASKS -->
     <div class="section" id="sec-tasks">
-      <div class="card">
-        <div class="card-hd"><div class="card-title"><div class="dot dp"></div>Moje úkoly</div><button class="btn" onclick="openM('m-task')">+ Nový úkol</button></div>
-        <div class="tabs">
-          <button class="tab on" onclick="flt('all',this)">Všechny</button>
-          <button class="tab" onclick="flt('active',this)">Aktivní</button>
-          <button class="tab" onclick="flt('done',this)">Splněné</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;">
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-hd"><div class="card-title"><div class="dot dp"></div>Moje úkoly</div><button class="btn" onclick="openM('m-task')">+ Nový úkol</button></div>
+          <div class="scroll-inner"><div id="tlist" class="task-list"></div></div>
         </div>
-        <div class="scroll-inner"><div id="tlist" class="task-list"></div></div>
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-hd"><div class="card-title"><div class="dot dg"></div>Splněné úkoly</div></div>
+          <div class="scroll-inner"><div id="tlist-done" class="task-list"></div></div>
+        </div>
       </div>
     </div>
 
@@ -551,7 +552,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 
     <!-- PROJECTS -->
     <div class="section" id="sec-projects">
-      <div class="card"><div class="card-hd"><div class="card-title"><div class="dot dp"></div>Moje projekty</div><button class="btn" onclick="openM('m-proj')">+ Nový projekt</button></div><div id="proj-grid" class="proj-grid"></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;">
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-hd"><div class="card-title"><div class="dot dp"></div>Zakázky</div><button class="btn" onclick="openProjM('contract')">+ Nová zakázka</button></div>
+          <div id="proj-grid-contract" class="proj-grid"></div>
+          <div class="wallet-total" id="contract-total" style="display:none;margin-top:8px;"><span class="wallet-total-lbl">Celkem zakázky</span><span class="wallet-total-val" id="contract-total-val" style="color:var(--purple)">0 Kč</span></div>
+        </div>
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-hd"><div class="card-title"><div class="dot dg"></div>Moje projekty</div><button class="btn" onclick="openProjM('project')">+ Nový projekt</button></div>
+          <div id="proj-grid-project" class="proj-grid"></div>
+        </div>
+      </div>
     </div>
 
     <!-- WEEKLY -->
@@ -559,20 +570,52 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 
     <!-- FINANCE -->
     <div class="section" id="sec-finance">
-      <div class="bal-bar"><div><div class="bal-lbl">Celkový zůstatek (příjmy − výdaje)</div></div><div class="bal-val" id="bal">0 Kč</div></div>
+      <!-- 1. K dispozici (Hotovost + Na účtu) -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(20,184,166,0.06);border:1px solid rgba(20,184,166,0.18);border-radius:13px;margin-bottom:12px;">
-        <div><div style="font-size:11px;color:var(--text2);font-weight:500;">Celkem k dispozici</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">zůstatek + účty + hotovost + v čem mám peníze</div></div>
+        <div><div style="font-size:11px;color:var(--text2);font-weight:500;">K dispozici</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">Hotovost + Na účtu</div></div>
+        <div style="font-family:'Inter',sans-serif;font-size:19px;font-weight:800;color:var(--teal)" id="fin-kdispo-val">0 Kč</div>
+      </div>
+      <!-- 2. Celkový zůstatek -->
+      <div class="bal-bar" style="margin-bottom:12px;"><div><div class="bal-lbl">Celkový zůstatek (příjmy − výdaje)</div></div><div class="bal-val" id="bal">0 Kč</div></div>
+      <!-- 3. Celkem k dispozici -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(20,184,166,0.04);border:1px solid rgba(20,184,166,0.12);border-radius:13px;margin-bottom:12px;">
+        <div><div style="font-size:11px;color:var(--text2);font-weight:500;">Celkem k dispozici</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">Zůstatek + Účty + Hotovost + V čem mám peníze</div></div>
         <div style="font-family:'Inter',sans-serif;font-size:19px;font-weight:800;color:var(--teal)" id="fin-super-val">0 Kč</div>
       </div>
+      <!-- K dispozici + Výdaje -->
       <div class="two-col" style="margin-bottom:12px;">
-        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dg"></div>Příjmy</div><button class="btn" onclick="openFinM('income')">+ Přidat</button></div><div class="scroll-inner" id="ilist"></div></div>
-        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dr"></div>Výdaje</div><button class="btn" onclick="openFinM('expense')">+ Přidat</button></div><div class="scroll-inner" id="elist"></div></div>
+        <div class="card" style="margin-bottom:0">
+          <div class="card-hd"><div class="card-title"><div class="dot dg"></div>K dispozici</div><button class="btn" onclick="openFinM('income')">+ Přidat</button></div>
+          <div class="scroll-inner" id="ilist"></div>
+          <div class="wallet-total" id="income-total" style="display:none"><span class="wallet-total-lbl">Celkem</span><span class="wallet-total-val" id="income-total-val" style="color:var(--success)">0 Kč</span></div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <div class="card-hd"><div class="card-title"><div class="dot dr"></div>Výdaje</div><button class="btn" onclick="openFinM('expense')">+ Přidat</button></div>
+          <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center;flex-wrap:wrap;">
+            <input type="date" id="exp-from" class="mi" style="flex:1;min-width:100px;font-size:11px;padding:5px 8px;" onchange="renderFinance()">
+            <span style="font-size:11px;color:var(--text3);">—</span>
+            <input type="date" id="exp-to" class="mi" style="flex:1;min-width:100px;font-size:11px;padding:5px 8px;" onchange="renderFinance()">
+            <button class="btn" style="font-size:10px;padding:4px 8px;" onclick="document.getElementById('exp-from').value='';document.getElementById('exp-to').value='';renderFinance();">✕</button>
+          </div>
+          <div id="elist" style="max-height:calc(5 * 44px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(139,92,246,0.2) transparent;"></div>
+          <div class="wallet-total" style="display:flex;margin-top:8px;"><span class="wallet-total-lbl">Celkem výdaje</span><span class="wallet-total-val" id="exp-total-lbl" style="color:var(--danger)">0 Kč</span></div>
+        </div>
       </div>
+      <!-- Na účtu + Hotovost + V čem mám peníze -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
-        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot db"></div>Na účtě</div><button class="btn" onclick="openM('m-account')">+ Přidat</button></div><div id="account-list"></div><div class="wallet-total" id="account-total" style="display:none"><span class="wallet-total-lbl">Celkem na účtech</span><span class="wallet-total-val" id="account-total-val" style="color:var(--blue)">0 Kč</span></div></div>
-        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot" style="background:var(--amber);box-shadow:0 0 8px var(--amber)"></div>Hotovost</div><button class="btn" onclick="openM('m-cash')">+ Přidat</button></div><div id="cash-list"></div><div class="wallet-total" id="cash-total" style="display:none"><span class="wallet-total-lbl">Celkem hotovost</span><span class="wallet-total-val" id="cash-total-val" style="color:var(--amber)">0 Kč</span></div></div>
+        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot db"></div>Na účtu</div><button class="btn" onclick="openM('m-account')">+ Přidat</button></div><div id="account-list" style="max-height:130px;overflow-y:auto;scrollbar-width:none;"></div><div class="wallet-total" id="account-total" style="display:none"><span class="wallet-total-lbl">Celkem na účtech</span><span class="wallet-total-val" id="account-total-val" style="color:var(--blue)">0 Kč</span></div></div>
+        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot" style="background:var(--amber);box-shadow:0 0 8px var(--amber)"></div>Hotovost</div><button class="btn" onclick="openM('m-cash')">+ Přidat</button></div><div id="cash-list" style="max-height:130px;overflow-y:auto;scrollbar-width:none;"></div><div class="wallet-total" id="cash-total" style="display:none"><span class="wallet-total-lbl">Celkem hotovost</span><span class="wallet-total-val" id="cash-total-val" style="color:var(--amber)">0 Kč</span></div></div>
         <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dt"></div>V čem mám peníze</div><button class="btn" onclick="openM('m-wallet')">+ Přidat</button></div><div id="wallet-list"></div><div class="wallet-total" id="wallet-total" style="display:none"><span class="wallet-total-lbl">Celkem uloženo</span><span class="wallet-total-val" id="wallet-total-val">0 Kč</span></div></div>
       </div>
+      <!-- Dlouhodobé dluhy -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.18);border-radius:13px;margin-bottom:8px;">
+        <div><div style="font-size:11px;color:var(--text2);font-weight:500;">Dlouhodobé dluhy</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">Součet všech dluhů</div></div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-family:'Inter',sans-serif;font-size:19px;font-weight:800;color:var(--danger)" id="fin-debt-val">0 Kč</div>
+          <button class="btn" style="font-size:11px;padding:4px 10px;" onclick="openM('m-debt')">+ Dluh</button>
+        </div>
+      </div>
+      <div id="fin-debt-list" style="margin-bottom:0;"></div>
     </div>
 
     <!-- NOTES -->
@@ -611,10 +654,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
     <div class="ma"><button class="btn" onclick="closeM('m-task')">Zrušit</button><button class="btn btn-primary" onclick="addTask(this)">Přidat úkol</button></div>
   </div>
 </div>
-<div class="ov-modal" id="m-fin"><div class="modal"><div class="modal-title" id="fin-mtitle">💚 Nový příjem</div><div class="mf"><label class="ml">Popis</label><input class="mi" id="fi-name" placeholder="Název položky"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="fi-amt" placeholder="0"></div><div class="ma"><button class="btn" onclick="closeM('m-fin')">Zrušit</button><button class="btn btn-primary" onclick="addFin(this)">Přidat</button></div></div></div>
-<div class="ov-modal" id="m-wallet"><div class="modal"><div class="modal-title">💰 V čem mám peníze</div><div class="mf"><label class="ml">Název</label><input class="mi" id="wi-name" placeholder="Hotovost, Revolut..."></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="wi-ico" placeholder="💰" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="wi-amt" placeholder="0"></div><div class="ma"><button class="btn" onclick="closeM('m-wallet')">Zrušit</button><button class="btn btn-primary" onclick="addWallet(this)">Přidat</button></div></div></div>
-<div class="ov-modal" id="m-account"><div class="modal"><div class="modal-title">🏦 Na účtě</div><div class="mf"><label class="ml">Název účtu</label><input class="mi" id="ai-name" placeholder="Raiffeisen, Spořicí..."></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="ai-ico" placeholder="🏦" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Stav (Kč)</label><input class="mi" type="number" id="ai-amt" placeholder="0"></div><div class="ma"><button class="btn" onclick="closeM('m-account')">Zrušit</button><button class="btn btn-primary" onclick="addAccount(this)">Přidat</button></div></div></div>
-<div class="ov-modal" id="m-edit-wallet"><div class="modal"><div class="modal-title">✏️ Upravit položku</div><input type="hidden" id="ew-id"><input type="hidden" id="ew-type"><div class="mf"><label class="ml">Název</label><input class="mi" id="ew-name"></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="ew-ico" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ew-amt"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-wallet')">Zrušit</button><button class="btn" style="background:rgba(16,185,129,0.14);border-color:rgba(16,185,129,0.28);color:#6ee7b7" onclick="moveToIncome()">→ Do příjmů</button><button class="btn btn-primary" onclick="saveEditWallet()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-fin"><div class="modal"><div class="modal-title" id="fin-mtitle">💚 Nový příjem</div><div class="mf"><label class="ml">Popis</label><input class="mi" id="fi-name" placeholder="Název položky"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="fi-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="fi-date"></div><div class="ma"><button class="btn" onclick="closeM('m-fin')">Zrušit</button><button class="btn btn-primary" onclick="addFin(this)">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-wallet"><div class="modal"><div class="modal-title">💰 V čem mám peníze</div><div class="mf"><label class="ml">Název</label><input class="mi" id="wi-name" placeholder="Hotovost, Revolut..."></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="wi-ico" placeholder="💰" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="wi-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="wi-date"></div><div class="ma"><button class="btn" onclick="closeM('m-wallet')">Zrušit</button><button class="btn btn-primary" onclick="addWallet(this)">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-account"><div class="modal"><div class="modal-title">🏦 Na účtě</div><div class="mf"><label class="ml">Název účtu</label><input class="mi" id="ai-name" placeholder="Raiffeisen, Spořicí..."></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="ai-ico" placeholder="🏦" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Stav (Kč)</label><input class="mi" type="number" id="ai-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="ai-date"></div><div class="ma"><button class="btn" onclick="closeM('m-account')">Zrušit</button><button class="btn btn-primary" onclick="addAccount(this)">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-edit-wallet"><div class="modal"><div class="modal-title">✏️ Upravit položku</div><input type="hidden" id="ew-id"><input type="hidden" id="ew-type"><div class="mf"><label class="ml">Název</label><input class="mi" id="ew-name"></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="ew-ico" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ew-amt"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="ew-date"></div><div class="mf" id="ew-transfer-row"><label class="ml">Přesunout do</label><select class="mi" id="ew-transfer-target"><option value="">— nevybráno —</option><option value="income">K dispozici</option><option value="account">Na účet</option><option value="cash">Hotovost</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-edit-wallet')">Zrušit</button><button class="btn" style="background:rgba(16,185,129,0.14);border-color:rgba(16,185,129,0.28);color:#6ee7b7" onclick="moveWallet()">→ Přesunout</button><button class="btn btn-primary" onclick="saveEditWallet()">Uložit</button></div></div></div>
 <div class="ov-modal" id="m-note"><div class="modal"><div class="modal-title">📝 Nová poznámka</div><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="ni-title" placeholder="Název"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="ni-content" placeholder="Obsah..." rows="4" style="resize:vertical"></textarea></div><div class="ma"><button class="btn" onclick="closeM('m-note')">Zrušit</button><button class="btn btn-primary" onclick="addNote(this)">Uložit</button></div></div></div>
 <div class="ov-modal" id="m-link"><div class="modal"><div class="modal-title">🔗 Nový odkaz</div><div class="mf"><label class="ml">Název</label><input class="mi" id="li-name" placeholder="GitHub..."></div><div class="mf"><label class="ml">URL</label><input class="mi" id="li-url" placeholder="https://..."></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="li-ico" placeholder="🔗" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="ma"><button class="btn" onclick="closeM('m-link')">Zrušit</button><button class="btn btn-primary" onclick="addLink(this)">Přidat</button></div></div></div>
 <div class="ov-modal" id="m-cal"><div class="modal"><div class="modal-title">📅 Nová událost</div><div class="mf"><label class="ml">Název</label><input class="mi" id="ci-name" placeholder="Název události"></div><div class="mf"><label class="ml">Datum a čas</label><input class="mi" type="datetime-local" id="ci-date"></div><div class="mf"><label class="ml">Barva</label><select class="mi" id="ci-color"><option value="#8b5cf6">Fialová</option><option value="#ec4899">Růžová</option><option value="#14b8a6">Tyrkysová</option><option value="#f59e0b">Žlutá</option><option value="#ef4444">Červená</option><option value="#3b82f6">Modrá</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-cal')">Zrušit</button><button class="btn btn-primary" onclick="addCalEvent(this)">Přidat</button></div></div></div>
@@ -622,24 +665,28 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 
 <div class="ov-modal" id="m-edit-meet"><div class="modal"><div class="modal-title">✏️ Upravit schůzku</div><input type="hidden" id="em-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="em-name"></div><div class="mf"><label class="ml">S kým</label><input class="mi" id="em-with"></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="em-date-d"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="em-date-t"></div><div class="mf"><label class="ml">Místo / odkaz</label><input class="mi" id="em-loc"></div><div class="mf" style="display:flex;align-items:center;gap:10px;padding:8px 0;"><input type="checkbox" id="em-urgent" style="width:16px;height:16px;accent-color:var(--danger);cursor:pointer;"><label for="em-urgent" style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;font-weight:500;"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);display:inline-block;animation:urgentPulse 1s ease-in-out infinite;"></span>Urgentní</label></div><div class="ma"><button class="btn" onclick="closeM('m-edit-meet')">Zrušit</button><button class="btn btn-primary" onclick="saveEditMeeting()">Uložit</button></div></div></div>
 
-<div class="ov-modal" id="m-cash"><div class="modal"><div class="modal-title">💵 Hotovost</div><div class="mf"><label class="ml">Popis</label><input class="mi" id="ci2-name" placeholder="Např. Peněženka, Trezor..."></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ci2-amt" placeholder="0"></div><div class="ma"><button class="btn" onclick="closeM('m-cash')">Zrušit</button><button class="btn btn-primary" onclick="addCash(this)">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-cash"><div class="modal"><div class="modal-title">💵 Hotovost</div><div class="mf"><label class="ml">Popis</label><input class="mi" id="ci2-name" placeholder="Např. Peněženka, Trezor..."></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ci2-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="ci2-date"></div><div class="ma"><button class="btn" onclick="closeM('m-cash')">Zrušit</button><button class="btn btn-primary" onclick="addCash(this)">Přidat</button></div></div></div>
 
 <div class="ov-modal" id="m-interesting"><div class="modal"><div class="modal-title">💡 Nová zajímavost</div><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="ii-title" placeholder="Název zajímavosti"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="ii-content" placeholder="Co tě zaujalo..." rows="4" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Zdroj / odkaz (volitelné)</label><input class="mi" id="ii-source" placeholder="https://..."></div><div class="ma"><button class="btn" onclick="closeM('m-interesting')">Zrušit</button><button class="btn btn-primary" onclick="addInteresting(this)">Uložit</button></div></div></div>
 
 <div class="ov-modal" id="m-edit-week-task"><div class="modal"><div class="modal-title">✏️ Upravit úkol týdne</div><input type="hidden" id="ewt-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="ewt-name"></div><div class="mf"><label class="ml">Poznámka / popis</label><textarea class="mi" id="ewt-note" rows="3" style="resize:vertical" placeholder="Doplňující poznámka..."></textarea></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="ewt-due-date"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="ewt-due-time"></div><div class="mf"><label class="ml">Projekt</label><select class="mi" id="ewt-project"><option value="">— bez projektu —</option></select></div><div class="mf" style="display:flex;gap:16px;padding:6px 0;"><label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:500;"><input type="checkbox" id="ewt-urgent" style="width:15px;height:15px;accent-color:var(--danger);"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);display:inline-block;animation:urgentPulse 1s ease-in-out infinite;"></span>Urgentní</label><label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:500;"><input type="checkbox" id="ewt-important" style="width:15px;height:15px;accent-color:var(--danger);">🔴 Důležité</label></div><div class="ma"><button class="btn" onclick="closeM('m-edit-week-task')">Zrušit</button><button class="btn btn-primary" onclick="saveEditWeekTask()">Uložit</button></div></div></div>
 
-<div class="ov-modal" id="m-edit-proj"><div class="modal"><div class="modal-title">✏️ Upravit projekt</div><input type="hidden" id="eproj-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="eproj-name"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="eproj-desc" rows="3" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Stav</label><select class="mi" id="eproj-status"><option value="active">Aktivní</option><option value="paused">Pozastavený</option><option value="done">Dokončený</option></select></div><div class="mf"><label class="ml">Postup (%)</label><input class="mi" type="number" id="eproj-progress" min="0" max="100"></div><div class="mf"><label class="ml">Barva</label><select class="mi" id="eproj-color"><option value="#8b5cf6">Fialová</option><option value="#ec4899">Růžová</option><option value="#14b8a6">Tyrkysová</option><option value="#f59e0b">Žlutá</option><option value="#3b82f6">Modrá</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-edit-proj')">Zrušit</button><button class="btn btn-primary" onclick="saveEditProject()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-edit-proj"><div class="modal"><div class="modal-title">✏️ Upravit projekt</div><input type="hidden" id="eproj-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="eproj-name"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="eproj-desc" rows="3" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Stav</label><select class="mi" id="eproj-status"><option value="active">Aktivní</option><option value="paused">Pozastavený</option><option value="done">Dokončený</option></select></div><div class="mf"><label class="ml">Postup (%)</label><input class="mi" type="number" id="eproj-progress" min="0" max="100"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="eproj-amount" placeholder="0"></div><div class="mf"><label class="ml">Typ</label><select class="mi" id="eproj-type"><option value="contract">Zakázka</option><option value="project">Můj projekt</option></select></div><div class="mf"><label class="ml">Barva</label><select class="mi" id="eproj-color"><option value="#8b5cf6">Fialová</option><option value="#ec4899">Růžová</option><option value="#14b8a6">Tyrkysová</option><option value="#f59e0b">Žlutá</option><option value="#3b82f6">Modrá</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-edit-proj')">Zrušit</button><button class="btn btn-primary" onclick="saveEditProject()">Uložit</button></div></div></div>
 
-<div class="ov-modal" id="m-edit-cash"><div class="modal"><div class="modal-title">✏️ Upravit hotovost</div><input type="hidden" id="ec-id"><div class="mf"><label class="ml">Popis</label><input class="mi" id="ec-name"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ec-amt"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-cash')">Zrušit</button><button class="btn btn-primary" onclick="saveEditCash()">Uložit</button></div></div></div><div class="modal"><div class="modal-title">✏️ Upravit zajímavost</div><input type="hidden" id="ei-id"><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="ei-title"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="ei-content" rows="4" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Zdroj</label><input class="mi" id="ei-source"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-interesting')">Zrušit</button><button class="btn btn-primary" onclick="saveEditInteresting()">Uložit</button></div></div></div>
-<div class="ov-modal" id="m-proj"><div class="modal"><div class="modal-title">🚀 Nový projekt</div><div class="mf"><label class="ml">Název</label><input class="mi" id="pi-name" placeholder="Název projektu"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="pi-desc" placeholder="Krátký popis..." rows="3" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Stav</label><select class="mi" id="pi-status"><option value="active">Aktivní</option><option value="paused">Pozastavený</option><option value="done">Dokončený</option></select></div><div class="mf"><label class="ml">Postup (%)</label><input class="mi" type="number" id="pi-progress" placeholder="0" min="0" max="100"></div><div class="mf"><label class="ml">Barva</label><select class="mi" id="pi-color"><option value="#8b5cf6">Fialová</option><option value="#ec4899">Růžová</option><option value="#14b8a6">Tyrkysová</option><option value="#f59e0b">Žlutá</option><option value="#3b82f6">Modrá</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-proj')">Zrušit</button><button class="btn btn-primary" onclick="addProject(this)">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-edit-cash"><div class="modal"><div class="modal-title">✏️ Upravit hotovost</div><input type="hidden" id="ec-id"><div class="mf"><label class="ml">Popis</label><input class="mi" id="ec-name"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ec-amt"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="ec-date"></div><div class="mf"><label class="ml">Přesunout do</label><select class="mi" id="ec-transfer-target"><option value="">— jen uložit —</option><option value="wallet">V čem mám peníze</option><option value="account">Na účet</option><option value="income">K dispozici</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-edit-cash')">Zrušit</button><button class="btn" style="background:rgba(16,185,129,0.14);border-color:rgba(16,185,129,0.28);color:#6ee7b7" id="ec-move-btn" onclick="moveCash(parseInt(document.getElementById('ec-id').value))">→ Přesunout</button><button class="btn btn-primary" onclick="saveEditCash()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-edit-interesting"><div class="modal"><div class="modal-title">✏️ Upravit zajímavost</div><input type="hidden" id="ei-id"><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="ei-title"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="ei-content" rows="4" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Zdroj</label><input class="mi" id="ei-source"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-interesting')">Zrušit</button><button class="btn btn-primary" onclick="saveEditInteresting()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-edit-link"><div class="modal"><div class="modal-title">✏️ Upravit odkaz</div><input type="hidden" id="el-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="el-name"></div><div class="mf"><label class="ml">URL</label><input class="mi" id="el-url"></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="el-ico" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-link')">Zrušit</button><button class="btn btn-primary" onclick="saveEditLink()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-debt"><div class="modal"><div class="modal-title">💳 Nový dluh</div><div class="mf"><label class="ml">Popis</label><input class="mi" id="di-name" placeholder="Název dluhu..."></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="di-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="di-date"></div><div class="ma"><button class="btn" onclick="closeM('m-debt')">Zrušit</button><button class="btn btn-primary" onclick="addDebt(this)">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-edit-debt"><div class="modal"><div class="modal-title">✏️ Upravit dluh</div><input type="hidden" id="ed-id"><div class="mf"><label class="ml">Popis</label><input class="mi" id="ed-name"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ed-amt"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="ed-date"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-debt')">Zrušit</button><button class="btn btn-primary" onclick="saveEditDebt()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-proj"><div class="modal"><div class="modal-title" id="proj-mtitle">🚀 Nový projekt</div><input type="hidden" id="pi-type"><div class="mf"><label class="ml">Název</label><input class="mi" id="pi-name" placeholder="Název projektu"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="pi-desc" placeholder="Krátký popis..." rows="3" style="resize:vertical"></textarea></div><div class="mf"><label class="ml">Stav</label><select class="mi" id="pi-status"><option value="active">Aktivní</option><option value="paused">Pozastavený</option><option value="done">Dokončený</option></select></div><div class="mf"><label class="ml">Postup (%)</label><input class="mi" type="number" id="pi-progress" placeholder="0" min="0" max="100"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="pi-amount" placeholder="0"></div><div class="mf"><label class="ml">Barva</label><select class="mi" id="pi-color"><option value="#8b5cf6">Fialová</option><option value="#ec4899">Růžová</option><option value="#14b8a6">Tyrkysová</option><option value="#f59e0b">Žlutá</option><option value="#3b82f6">Modrá</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-proj')">Zrušit</button><button class="btn btn-primary" onclick="addProject(this)">Přidat</button></div></div></div>
 <div class="ov-modal" id="m-week-setup"><div class="modal"><div class="modal-title">📋 Nastavit týden</div><div class="mf"><label class="ml">Začátek</label><input class="mi" type="date" id="wi-from"></div><div class="mf"><label class="ml">Konec</label><input class="mi" type="date" id="wi-to"></div><div class="ma"><button class="btn" onclick="closeM('m-week-setup')">Zrušit</button><button class="btn btn-primary" onclick="setupWeek()">Nastavit</button></div></div></div>
 <div class="ov-modal" id="m-week-task"><div class="modal"><div class="modal-title">📋 Úkol týdne</div><div class="mf"><label class="ml">Název úkolu</label><input class="mi" id="wti-name" placeholder="Co musím tento týden zvládnout?"></div><div class="mf"><label class="ml">Poznámka (volitelné)</label><textarea class="mi" id="wti-note" rows="2" style="resize:vertical" placeholder="Doplňující poznámka..."></textarea></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="wti-due-date"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="wti-due-time"></div><div class="mf"><label class="ml">Projekt</label><select class="mi" id="wti-project"><option value="">— bez projektu —</option></select></div><div class="mf" style="display:flex;gap:16px;padding:6px 0;"><label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:500;"><input type="checkbox" id="wti-urgent" style="width:15px;height:15px;accent-color:var(--danger);"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);display:inline-block;animation:urgentPulse 1s ease-in-out infinite;"></span>Urgentní</label><label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;font-weight:500;"><input type="checkbox" id="wti-important" style="width:15px;height:15px;accent-color:var(--danger);">🔴 Důležité</label></div><div class="ma"><button class="btn" onclick="closeM('m-week-task')">Zrušit</button><button class="btn btn-primary" onclick="addWeekTask()">Přidat</button></div></div></div>
 
-<div class="ov-modal" id="m-edit-task"><div class="modal"><div class="modal-title">✏️ Upravit úkol</div><input type="hidden" id="et-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="et-name"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="et-desc" rows="2" style="resize:vertical" placeholder="Doplňující popis..."></textarea></div><div class="mf"><label class="ml">Kategorie</label><select class="mi" id="et-tag"><option value="work">Práce</option><option value="personal">Osobní</option><option value="finance">Finance</option><option value="urgent">🔴 Urgentní</option></select></div><div class="mf"><label class="ml">Projekt</label><select class="mi" id="et-project"><option value="">— bez projektu —</option></select></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="et-due-date"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="et-due-time"></div><div class="mf" style="display:flex;align-items:center;gap:10px;padding:8px 0;"><input type="checkbox" id="et-important" style="width:16px;height:16px;accent-color:var(--danger);cursor:pointer;"><label for="et-important" style="font-size:13px;cursor:pointer;font-weight:500;">🔴 Důležité</label></div><div class="ma"><button class="btn" onclick="closeM('m-edit-task')">Zrušit</button><button class="btn btn-primary" onclick="saveEditTask()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-edit-task"><div class="modal"><div class="modal-title">✏️ Upravit úkol</div><input type="hidden" id="et-id"><div class="mf"><label class="ml">Název</label><input class="mi" id="et-name"></div><div class="mf"><label class="ml">Popis</label><textarea class="mi" id="et-desc" rows="2" style="resize:vertical" placeholder="Doplňující popis..."></textarea></div><div class="mf"><label class="ml">Kategorie</label><select class="mi" id="et-tag"><option value="work">Práce</option><option value="personal">Osobní</option><option value="finance">Finance</option><option value="urgent">🔴 Urgentní</option></select></div><div class="mf"><label class="ml">Projekt</label><select class="mi" id="et-project"><option value="">— bez projektu —</option></select></div><div class="mf"><label class="ml">Termín — datum</label><input class="mi" type="date" id="et-due-date"></div><div class="mf"><label class="ml">Termín — čas (volitelné)</label><input class="mi" type="time" id="et-due-time"></div><div class="mf"><label class="ml">Datum vložení</label><input class="mi" type="date" id="et-created"></div><div class="mf" style="display:flex;align-items:center;gap:10px;padding:8px 0;"><input type="checkbox" id="et-important" style="width:16px;height:16px;accent-color:var(--danger);cursor:pointer;"><label for="et-important" style="font-size:13px;cursor:pointer;font-weight:500;">🔴 Důležité</label></div><div class="ma"><button class="btn" onclick="closeM('m-edit-task')">Zrušit</button><button class="btn btn-primary" onclick="saveEditTask()">Uložit</button></div></div></div>
 
 <div class="ov-modal" id="m-edit-note"><div class="modal"><div class="modal-title">✏️ Upravit poznámku</div><input type="hidden" id="en-id"><div class="mf"><label class="ml">Nadpis</label><input class="mi" id="en-title"></div><div class="mf"><label class="ml">Obsah</label><textarea class="mi" id="en-content" rows="5" style="resize:vertical"></textarea></div><div class="ma"><button class="btn" onclick="closeM('m-edit-note')">Zrušit</button><button class="btn btn-primary" onclick="saveEditNote()">Uložit</button></div></div></div>
 
-<div class="ov-modal" id="m-edit-fin"><div class="modal"><div class="modal-title">✏️ Upravit položku</div><input type="hidden" id="ef-id"><div class="mf"><label class="ml">Popis</label><input class="mi" id="ef-name"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ef-amt"></div><div class="ma"><button class="btn" onclick="closeM('m-edit-fin')">Zrušit</button><button class="btn btn-primary" onclick="saveEditFin()">Uložit</button></div></div></div>
+<div class="ov-modal" id="m-edit-fin"><div class="modal"><div class="modal-title">✏️ Upravit položku</div><input type="hidden" id="ef-id"><div class="mf"><label class="ml">Popis</label><input class="mi" id="ef-name"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ef-amt"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="ef-date"></div><div class="mf"><label class="ml">Přesunout do</label><select class="mi" id="ef-transfer-target"><option value="">— jen uložit —</option><option value="wallet">V čem mám peníze</option><option value="account">Na účet</option><option value="cash">Hotovost</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-edit-fin')">Zrušit</button><button class="btn" style="background:rgba(16,185,129,0.14);border-color:rgba(16,185,129,0.28);color:#6ee7b7" onclick="moveFin()">→ Přesunout</button><button class="btn btn-primary" onclick="saveEditFin()">Uložit</button></div></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script type="module">
@@ -674,7 +721,7 @@ async function fbLoad() {
       const data = snap.data();
       Object.assign(S, data);
     }
-    ['tasks','finance','notes','links','wallet','events','meetings','projects','accounts','interesting','cash'].forEach(k=>{if(!S[k])S[k]=[];});
+    ['tasks','finance','notes','links','wallet','events','meetings','projects','accounts','interesting','cash','debts'].forEach(k=>{if(!S[k])S[k]=[];});
     if(!S.currentWeek)S.currentWeek=null;
     document.getElementById('fb-status').textContent = '● Online';
     document.getElementById('fb-status').style.color = '#10b981';
@@ -708,12 +755,12 @@ fbLoad();
 </script>
 <script>
 // ═══ STATE ═══
-let S={tasks:[],finance:[],notes:[],links:[],wallet:[],events:[],meetings:[],projects:[],accounts:[]};
+let S={tasks:[],finance:[],notes:[],links:[],wallet:[],events:[],meetings:[],projects:[],accounts:[],debts:[]};
 let finType='income',taskFlt='all';
 const URGENT_H=48;
 let chartIncome=null,chartTasks=null;
 
-function localLoad(){const d=localStorage.getItem('mws3');if(d)Object.assign(S,JSON.parse(d));['tasks','finance','notes','links','wallet','events','meetings','projects','accounts','interesting','cash'].forEach(k=>{if(!S[k])S[k]=[];});if(!S.currentWeek)S.currentWeek=null;}
+function localLoad(){const d=localStorage.getItem('mws3');if(d)Object.assign(S,JSON.parse(d));['tasks','finance','notes','links','wallet','events','meetings','projects','accounts','interesting','cash','debts'].forEach(k=>{if(!S[k])S[k]=[];});if(!S.currentWeek)S.currentWeek=null;}
 function load(){localLoad();}
 function save(){if(window.fbSave)window.fbSave();else{localStorage.setItem('mws3',JSON.stringify(S));}}
 
@@ -825,7 +872,7 @@ function quickAdd(btn){
   else if(a==='sec-links')openM('m-link');
   else if(a==='sec-calendar')openM('m-cal');
   else if(a==='sec-meetings')openM('m-meet');
-  else if(a==='sec-projects')openM('m-proj');
+  else if(a==='sec-projects')openProjM('project');
   else if(a==='sec-weekly')openM('m-week-task');
   else if(a==='sec-interesting')openM('m-interesting');
   else openM('m-task');
@@ -854,6 +901,8 @@ const tagCls={work:'t-work',personal:'t-personal',finance:'t-finance',urgent:'t-
 const tagLbl={work:'Práce',personal:'Osobní',finance:'Finance',urgent:'🔴 Urgentní'};
 function getProjColor(n){if(!n)return null;const p=(S.projects||[]).find(x=>x.name===n);return p?p.color:null;}
 
+function fmtC(ds){if(!ds)return'';const d=new Date(ds);return d.toLocaleDateString('cs-CZ',{day:'2-digit',month:'2-digit',year:'numeric'});}
+
 function taskHTML(t,showDel=true){
   const urg=isUrgent(t),dl=dueLabel(t.due);
   const dlSoon=t.due&&(new Date(t.due)-new Date())/(1000*60*60)<=URGENT_H;
@@ -866,7 +915,7 @@ function taskHTML(t,showDel=true){
     <div class="ti-body">
       <div class="ti-name">${t.name}</div>
       ${t.desc?`<div style="font-size:11px;color:var(--text3);margin-top:2px;line-height:1.4;">${t.desc}</div>`:''}
-      <div class="ti-meta">${ptag}<span class="tag ${tagCls[t.tag]||'t-work'}">${tagLbl[t.tag]||t.tag}</span>${t.due?`<span class="ti-due ${dlSoon&&!t.done?'soon':''}">${dueLabel(t.due)}</span>`:''}</div>
+      <div class="ti-meta">${ptag}<span class="tag ${tagCls[t.tag]||'t-work'}">${tagLbl[t.tag]||t.tag}</span>${t.due?`<span class="ti-due ${dlSoon&&!t.done?'soon':''}">${dueLabel(t.due)}</span>`:''}<span style="font-size:10px;color:var(--text3);margin-left:auto;">${fmtC(t.date)}</span></div>
     </div>
     ${showDel?`<button class="del-btn" style="opacity:0.7;font-size:13px;" onclick="openEditTask(${t.id})" title="Upravit">✏️</button><button class="del-btn" onclick="delTask(${t.id})">✕</button>`:''}
   </div>`;
@@ -908,6 +957,7 @@ function openEditTask(id){
     document.getElementById('et-due-date').value='';
     document.getElementById('et-due-time').value='';
   }
+  document.getElementById('et-created').value=t.date?t.date.substring(0,10):'';
   document.getElementById('et-important').checked=!!t.important;
   const sel=document.getElementById('et-project');
   sel.innerHTML='<option value="">— bez projektu —</option>';
@@ -926,14 +976,16 @@ function saveEditTask(){
   t.due=dateVal?(dateVal+'T'+timeVal):null;
   t.project=document.getElementById('et-project').value||null;
   t.important=document.getElementById('et-important').checked;
+  const cv=document.getElementById('et-created').value;
+  if(cv)t.date=new Date(cv).toISOString();
   save();renderAll();closeM('m-edit-task');
 }
 
 function renderTasks(){
-  let ts=S.tasks;
-  if(taskFlt==='active')ts=ts.filter(t=>!t.done);
-  if(taskFlt==='done')ts=ts.filter(t=>t.done);
-  document.getElementById('tlist').innerHTML=ts.length?ts.map(t=>taskHTML(t)).join(''):'<div class="empty"><div class="empty-ico">📭</div>Žádné úkoly</div>';
+  const active=S.tasks.filter(t=>!t.done).sort((a,b)=>{if(a.due&&b.due)return new Date(a.due)-new Date(b.due);if(a.due)return -1;if(b.due)return 1;return new Date(b.date)-new Date(a.date);});
+  const done=S.tasks.filter(t=>t.done).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('tlist').innerHTML=active.length?active.map(t=>taskHTML(t)).join(''):'<div class="empty"><div class="empty-ico">✅</div>Žádné aktivní úkoly</div>';
+  const dl=document.getElementById('tlist-done');if(dl)dl.innerHTML=done.length?done.map(t=>taskHTML(t)).join(''):'<div class="empty"><div class="empty-ico">📭</div>Zatím žádné splněné</div>';
 }
 function renderUrgent(){
   const urg=S.tasks.filter(t=>isUrgent(t)&&!t.done);const cnt=urg.length;
@@ -945,40 +997,154 @@ function renderUrgent(){
 }
 
 // ═══ FINANCE ═══
-function addFin(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('fi-name').value.trim();const a=parseFloat(document.getElementById('fi-amt').value);if(!n||!a)return;S.finance.unshift({id:Date.now(),name:n,amount:a,type:finType,date:new Date().toISOString()});save();renderAll();closeM('m-fin');document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';}
+function addFin(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('fi-name').value.trim();const a=parseFloat(document.getElementById('fi-amt').value);if(!n||!a)return;const dv=document.getElementById('fi-date').value;const date=dv?(new Date(dv).toISOString()):new Date().toISOString();S.finance.unshift({id:Date.now(),name:n,amount:a,type:finType,date});save();renderAll();closeM('m-fin');document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';document.getElementById('fi-date').value='';}
 function delFin(id){S.finance=S.finance.filter(x=>x.id!==id);save();renderAll();}
-function openEditFin(id){const f=S.finance.find(x=>x.id===id);if(!f)return;document.getElementById('ef-id').value=id;document.getElementById('ef-name').value=f.name;document.getElementById('ef-amt').value=f.amount;openM('m-edit-fin');}
-function saveEditFin(){const id=parseInt(document.getElementById('ef-id').value);const f=S.finance.find(x=>x.id===id);if(!f)return;const n=document.getElementById('ef-name').value.trim();const a=parseFloat(document.getElementById('ef-amt').value);if(!n||!a)return;f.name=n;f.amount=a;save();renderAll();closeM('m-edit-fin');}
-function addWallet(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('wi-name').value.trim();const ic=document.getElementById('wi-ico').value.trim()||'💰';const a=parseFloat(document.getElementById('wi-amt').value);if(!n||!a)return;S.wallet.unshift({id:Date.now(),name:n,icon:ic,amount:a});save();renderAll();closeM('m-wallet');document.getElementById('wi-name').value='';document.getElementById('wi-ico').value='';document.getElementById('wi-amt').value='';}
+function openEditFin(id){const f=S.finance.find(x=>x.id===id);if(!f)return;document.getElementById('ef-id').value=id;document.getElementById('ef-name').value=f.name;document.getElementById('ef-amt').value=f.amount;document.getElementById('ef-date').value=f.date?f.date.substring(0,10):'';document.getElementById('ef-transfer-target').value='';openM('m-edit-fin');}
+function saveEditFin(){const id=parseInt(document.getElementById('ef-id').value);const f=S.finance.find(x=>x.id===id);if(!f)return;const n=document.getElementById('ef-name').value.trim();const a=parseFloat(document.getElementById('ef-amt').value);if(!n||!a)return;f.name=n;f.amount=a;const dv=document.getElementById('ef-date').value;if(dv)f.date=new Date(dv).toISOString();save();renderAll();closeM('m-edit-fin');}
+function moveFin(){
+  const id=parseInt(document.getElementById('ef-id').value);
+  const f=S.finance.find(x=>x.id===id);if(!f)return;
+  const target=document.getElementById('ef-transfer-target').value;
+  const n=document.getElementById('ef-name').value.trim()||f.name;
+  const amt=parseFloat(document.getElementById('ef-amt').value)||f.amount;
+  if(!target)return alert('Vyber cíl přesunu.');
+  S.finance=S.finance.filter(x=>x.id!==id);
+  if(target==='wallet')S.wallet.unshift({id:Date.now(),name:n.replace(' (přesunuto)',''),icon:'💰',amount:amt});
+  else if(target==='account')S.accounts.unshift({id:Date.now(),name:n.replace(' (přesunuto)',''),icon:'🏦',amount:amt,moved:true,movedFrom:'income'});
+  else if(target==='cash'){if(!S.cash)S.cash=[];S.cash.unshift({id:Date.now(),name:n.replace(' (přesunuto)',''),amount:amt,moved:true,movedFrom:'income'});}
+  save();renderAll();closeM('m-edit-fin');
+}
+function addWallet(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('wi-name').value.trim();const ic=document.getElementById('wi-ico').value.trim()||'💰';const a=parseFloat(document.getElementById('wi-amt').value);if(!n||!a)return;const dv=document.getElementById('wi-date').value;const date=dv?new Date(dv).toISOString():new Date().toISOString();S.wallet.unshift({id:Date.now(),name:n,icon:ic,amount:a,date});save();renderAll();closeM('m-wallet');document.getElementById('wi-name').value='';document.getElementById('wi-ico').value='';document.getElementById('wi-amt').value='';document.getElementById('wi-date').value='';}
 function delWallet(id){S.wallet=S.wallet.filter(x=>x.id!==id);save();renderAll();}
-function addAccount(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('ai-name').value.trim();const ic=document.getElementById('ai-ico').value.trim()||'🏦';const a=parseFloat(document.getElementById('ai-amt').value);if(!n||!a)return;S.accounts.unshift({id:Date.now(),name:n,icon:ic,amount:a});save();renderAll();closeM('m-account');document.getElementById('ai-name').value='';document.getElementById('ai-ico').value='';document.getElementById('ai-amt').value='';}
+function addAccount(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('ai-name').value.trim();const ic=document.getElementById('ai-ico').value.trim()||'🏦';const a=parseFloat(document.getElementById('ai-amt').value);if(!n||!a)return;const dv=document.getElementById('ai-date').value;const date=dv?new Date(dv).toISOString():new Date().toISOString();S.accounts.unshift({id:Date.now(),name:n,icon:ic,amount:a,date});save();renderAll();closeM('m-account');document.getElementById('ai-name').value='';document.getElementById('ai-ico').value='';document.getElementById('ai-amt').value='';document.getElementById('ai-date').value='';}
 function delAccount(id){S.accounts=S.accounts.filter(x=>x.id!==id);save();renderAll();}
-function openEditWallet(id,type){const arr=type==='wallet'?S.wallet:S.accounts;const item=arr.find(x=>x.id===id);if(!item)return;document.getElementById('ew-id').value=id;document.getElementById('ew-type').value=type;document.getElementById('ew-name').value=item.name;document.getElementById('ew-ico').value=item.icon;document.getElementById('ew-amt').value=item.amount;openM('m-edit-wallet');}
-function saveEditWallet(){const id=parseInt(document.getElementById('ew-id').value);const type=document.getElementById('ew-type').value;const n=document.getElementById('ew-name').value.trim();const ic=document.getElementById('ew-ico').value.trim()||'💰';const a=parseFloat(document.getElementById('ew-amt').value);if(!n||!a)return;const arr=type==='wallet'?S.wallet:S.accounts;const item=arr.find(x=>x.id===id);if(item){item.name=n;item.icon=ic;item.amount=a;}save();renderAll();closeM('m-edit-wallet');}
-function moveToIncome(){const id=parseInt(document.getElementById('ew-id').value);const type=document.getElementById('ew-type').value;const n=document.getElementById('ew-name').value.trim();const a=parseFloat(document.getElementById('ew-amt').value);if(!n||!a)return;S.finance.unshift({id:Date.now(),name:n+' (přesunuto)',amount:a,type:'income',date:new Date().toISOString()});if(type==='wallet')S.wallet=S.wallet.filter(x=>x.id!==id);else S.accounts=S.accounts.filter(x=>x.id!==id);save();renderAll();closeM('m-edit-wallet');}
+function openEditWallet(id,type){
+  const arr=type==='wallet'?S.wallet:S.accounts;
+  const item=arr.find(x=>x.id===id);if(!item)return;
+  document.getElementById('ew-id').value=id;
+  document.getElementById('ew-type').value=type;
+  document.getElementById('ew-name').value=item.name;
+  document.getElementById('ew-ico').value=item.icon||'💰';
+  document.getElementById('ew-amt').value=item.amount;
+  document.getElementById('ew-date').value=item.date?item.date.substring(0,10):(new Date(item.id).toISOString().substring(0,10));
+  const sel=document.getElementById('ew-transfer-target');
+  sel.innerHTML='<option value="">— nevybráno —</option><option value="income">K dispozici</option><option value="account">Na účet</option><option value="cash">Hotovost</option><option value="wallet">V čem mám peníze</option>';
+  sel.value='';
+  const moveBtn=document.querySelector('#m-edit-wallet .btn[onclick^="moveWallet"]')||document.querySelector('#m-edit-wallet .btn[onclick^="moveAccount"]');
+  if(moveBtn){if(type==='account')moveBtn.setAttribute('onclick',`moveAccount(${id})`);else moveBtn.setAttribute('onclick','moveWallet()');}
+  openM('m-edit-wallet');
+}
+function saveEditWallet(){const id=parseInt(document.getElementById('ew-id').value);const type=document.getElementById('ew-type').value;const n=document.getElementById('ew-name').value.trim();const ic=document.getElementById('ew-ico').value.trim()||'💰';const a=parseFloat(document.getElementById('ew-amt').value);if(!n||!a)return;const arr=type==='wallet'?S.wallet:S.accounts;const item=arr.find(x=>x.id===id);if(item){item.name=n;item.icon=ic;item.amount=a;const dv=document.getElementById('ew-date').value;if(dv)item.date=new Date(dv).toISOString();}save();renderAll();closeM('m-edit-wallet');}
+// ═══ DLUHY ═══
+function addDebt(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('di-name').value.trim();const a=parseFloat(document.getElementById('di-amt').value);if(!n||!a)return;const dv=document.getElementById('di-date').value;const date=dv?new Date(dv).toISOString():new Date().toISOString();if(!S.debts)S.debts=[];S.debts.unshift({id:Date.now(),name:n,amount:a,date});save();renderAll();closeM('m-debt');document.getElementById('di-name').value='';document.getElementById('di-amt').value='';document.getElementById('di-date').value='';}
+function delDebt(id){if(!S.debts)return;S.debts=S.debts.filter(x=>x.id!==id);save();renderAll();}
+function openEditDebt(id){if(!S.debts)return;const d=S.debts.find(x=>x.id===id);if(!d)return;document.getElementById('ed-id').value=id;document.getElementById('ed-name').value=d.name;document.getElementById('ed-amt').value=d.amount;document.getElementById('ed-date').value=d.date?d.date.substring(0,10):(new Date(d.id).toISOString().substring(0,10));openM('m-edit-debt');}
+function saveEditDebt(){const id=parseInt(document.getElementById('ed-id').value);if(!S.debts)return;const d=S.debts.find(x=>x.id===id);if(!d)return;d.name=document.getElementById('ed-name').value.trim()||d.name;d.amount=parseFloat(document.getElementById('ed-amt').value)||d.amount;const dv=document.getElementById('ed-date').value;if(dv)d.date=new Date(dv).toISOString();save();renderAll();closeM('m-edit-debt');}
+
+function moveToIncome(){moveWallet();}
+function moveWallet(){
+  const id=parseInt(document.getElementById('ew-id').value);
+  const type=document.getElementById('ew-type').value;
+  const n=document.getElementById('ew-name').value.trim();
+  const ico=document.getElementById('ew-ico').value.trim()||'💰';
+  const a=parseFloat(document.getElementById('ew-amt').value);
+  const target=document.getElementById('ew-transfer-target').value;
+  if(!n||!a||!target)return alert('Vyber cíl přesunu.');
+  // Odeber ze zdroje
+  if(type==='wallet')S.wallet=S.wallet.filter(x=>x.id!==id);
+  else S.accounts=S.accounts.filter(x=>x.id!==id);
+  // Přidej do cíle — vždy s movedFrom pro možnost vrácení
+  if(target==='income'){
+    S.finance.unshift({id:Date.now(),name:n+' (přesunuto)',amount:a,type:'income',date:new Date().toISOString(),moved:true,movedFrom:'wallet',originalName:n,originalIcon:ico});
+  } else if(target==='account'){
+    S.accounts.unshift({id:Date.now(),name:n,icon:ico,amount:a,moved:true,movedFrom:'wallet',originalName:n,originalIcon:ico});
+  } else if(target==='cash'){
+    if(!S.cash)S.cash=[];
+    S.cash.unshift({id:Date.now(),name:n,amount:a,moved:true,movedFrom:'wallet',originalName:n,originalIcon:ico});
+  } else if(target==='wallet'){
+    S.wallet.unshift({id:Date.now(),name:n,icon:ico,amount:a});
+  }
+  save();renderAll();closeM('m-edit-wallet');
+}
+// Přesun z účtu zpět do wallet nebo jinam
+function moveAccount(id){
+  const a=S.accounts.find(x=>x.id===id);if(!a)return;
+  const target=document.getElementById('ew-transfer-target').value;
+  const n=document.getElementById('ew-name').value.trim();
+  const amt=parseFloat(document.getElementById('ew-amt').value);
+  const ico=document.getElementById('ew-ico').value.trim()||a.icon||'🏦';
+  if(!target)return alert('Vyber cíl přesunu.');
+  S.accounts=S.accounts.filter(x=>x.id!==id);
+  if(target==='wallet')S.wallet.unshift({id:Date.now(),name:n||a.originalName||a.name,icon:ico||a.originalIcon||'💰',amount:amt||a.amount});
+  else if(target==='cash'){if(!S.cash)S.cash=[];S.cash.unshift({id:Date.now(),name:n||a.name,amount:amt||a.amount,moved:true,movedFrom:'account'});}
+  else if(target==='income')S.finance.unshift({id:Date.now(),name:(n||a.name)+' (přesunuto)',amount:amt||a.amount,type:'income',date:new Date().toISOString(),moved:true});
+  save();renderAll();closeM('m-edit-wallet');
+}
+// Přesun z hotovosti zpět do wallet nebo jinam
+function moveCash(id){
+  if(!S.cash)return;const c=S.cash.find(x=>x.id===id);if(!c)return;
+  const target=document.getElementById('ec-transfer-target').value;
+  const n=document.getElementById('ec-name').value.trim()||c.name;
+  const amt=parseFloat(document.getElementById('ec-amt').value)||c.amount;
+  if(!target)return alert('Vyber cíl přesunu.');
+  S.cash=S.cash.filter(x=>x.id!==id);
+  if(target==='wallet')S.wallet.unshift({id:Date.now(),name:n,icon:c.originalIcon||c.icon||'💰',amount:amt});
+  else if(target==='account')S.accounts.unshift({id:Date.now(),name:n,icon:'🏦',amount:amt,moved:true,movedFrom:'cash'});
+  else if(target==='income')S.finance.unshift({id:Date.now(),name:n+' (přesunuto)',amount:amt,type:'income',date:new Date().toISOString(),moved:true});
+  save();renderAll();closeM('m-edit-cash');
+}
 
 function renderFinance(){
-  const inc=S.finance.filter(f=>f.type==='income'),exp=S.finance.filter(f=>f.type==='expense');
+  if(!S.debts)S.debts=[];
+  const byDate=(a,b)=>new Date(b.date||b.id)-new Date(a.date||a.id);
+  const inc=S.finance.filter(f=>f.type==='income').sort(byDate),exp=S.finance.filter(f=>f.type==='expense').sort(byDate);
   const ti=inc.reduce((s,f)=>s+f.amount,0),te=exp.reduce((s,f)=>s+f.amount,0),b=ti-te;
+  const sortedAccounts=[...S.accounts].sort(byDate),sortedCash=[...(S.cash||[])].sort(byDate),sortedWallet=[...S.wallet].sort(byDate),sortedDebts=[...S.debts].sort(byDate);
   const tw=S.wallet.reduce((s,w)=>s+w.amount,0),ta=S.accounts.reduce((s,a)=>s+a.amount,0);
+  const tc=(S.cash||[]).reduce((s,c)=>s+c.amount,0);
   const g=id=>document.getElementById(id);
+  // 1. K dispozici banner (účty+hotovost)
+  const kdispo=ta+tc;
+  if(g('fin-kdispo-val')){g('fin-kdispo-val').textContent=kdispo.toLocaleString('cs-CZ')+' Kč';g('fin-kdispo-val').style.color=kdispo>=0?'var(--teal)':'var(--danger)';}
+  // 2. Zůstatek
   if(g('bal')){g('bal').textContent=b.toLocaleString('cs-CZ')+' Kč';g('bal').style.color=b>=0?'var(--success)':'var(--danger)';}
-  const st=b+tw+ta+(S.cash||[]).reduce((s,c)=>s+c.amount,0);
+  // 3. Celkem k dispozici (zůstatek+účty+hotovost+wallet)
+  const st=b+tw+ta+tc;
   if(g('fin-super-val')){g('fin-super-val').textContent=st.toLocaleString('cs-CZ')+' Kč';g('fin-super-val').style.color=st>=0?'var(--teal)':'var(--danger)';}
-  const rL=(arr,el,cls)=>{if(!el)return;if(!arr.length){el.innerHTML='<div class="empty"><div class="empty-ico">📭</div>Žádné záznamy</div>';return;}el.innerHTML=arr.map(f=>`<div class="fin-row"><span class="fin-cat">${f.name}</span><div style="display:flex;align-items:center;gap:5px"><span class="fin-amt ${cls}">${cls==='inc'?'+':'-'}${f.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditFin(${f.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delFin(${f.id})">✕</button></div></div>`).join('');};
-  rL(inc,g('ilist'),'inc');rL(exp,g('elist'),'exp');
+  // Dluhy
+  const totalDebt=S.debts.reduce((s,d)=>s+d.amount,0);
+  if(g('fin-debt-val'))g('fin-debt-val').textContent=totalDebt.toLocaleString('cs-CZ')+' Kč';
+  const dPanel=g('fin-debt-list');
+  if(dPanel){if(!sortedDebts.length){dPanel.innerHTML='';}
+  else{dPanel.innerHTML='<div class="card" style="margin-bottom:0;padding:10px 14px;">'+sortedDebts.map(d=>`<div class="fin-row"><span class="fin-cat">${d.name}<span style="font-size:10px;color:var(--text3);margin-left:6px;">${fmtC(d.date||new Date(d.id).toISOString())}</span></span><div style="display:flex;align-items:center;gap:5px"><span class="fin-amt exp">${d.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditDebt(${d.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delDebt(${d.id})">✕</button></div></div>`).join('')+'</div>';}}
+  // K dispozici (příjmy) — seznam + součet
+  const rInc=g('ilist');const itotal=g('income-total');const itotalv=g('income-total-val');
+  if(rInc){if(!inc.length){rInc.innerHTML='<div class="empty"><div class="empty-ico">📭</div>Žádné záznamy</div>';if(itotal)itotal.style.display='none';}
+  else{rInc.innerHTML=inc.map(f=>`<div class="fin-row"><span class="fin-cat">${f.name}${f.moved?'<span style="font-size:9px;margin-left:5px;color:var(--text3);">↔</span>':''}<span style="font-size:10px;color:var(--text3);margin-left:6px;">${fmtC(f.date)}</span></span><div style="display:flex;align-items:center;gap:5px"><span class="fin-amt inc">+${f.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditFin(${f.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delFin(${f.id})">✕</button></div></div>`).join('');if(itotal)itotal.style.display='flex';if(itotalv)itotalv.textContent=ti.toLocaleString('cs-CZ')+' Kč';}}
+  // Výdaje s filtrem + součet
+  const fromV=g('exp-from')?.value,toV=g('exp-to')?.value;
+  let filtExp=exp;
+  if(fromV)filtExp=filtExp.filter(f=>new Date(f.date)>=new Date(fromV));
+  if(toV){const toD=new Date(toV);toD.setHours(23,59,59,999);filtExp=filtExp.filter(f=>new Date(f.date)<=toD);}
+  const teFiltered=filtExp.reduce((s,f)=>s+f.amount,0);
+  const rExp=g('elist');if(rExp){if(!filtExp.length){rExp.innerHTML='<div class="empty"><div class="empty-ico">📭</div>Žádné výdaje</div>';}
+  else{rExp.innerHTML=filtExp.map(f=>`<div class="fin-row"><span class="fin-cat">${f.name}<span style="font-size:10px;color:var(--text3);margin-left:6px;">${fmtC(f.date)}</span></span><div style="display:flex;align-items:center;gap:5px"><span class="fin-amt exp">-${f.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditFin(${f.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delFin(${f.id})">✕</button></div></div>`).join('');}}
+  if(g('exp-total-lbl'))g('exp-total-lbl').textContent=teFiltered.toLocaleString('cs-CZ')+' Kč';
+  // Na účtu
   const al=g('account-list'),at2=g('account-total'),atv=g('account-total-val');
-  if(al){if(!S.accounts.length){al.innerHTML='<div class="empty"><div class="empty-ico">🏦</div>Přidej stav účtu</div>';if(at2)at2.style.display='none';}
-  else{al.innerHTML=S.accounts.map(a=>`<div class="wallet-row"><span class="wallet-name"><span class="wallet-ico">${a.icon}</span>${a.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt" style="color:var(--blue)">${a.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditWallet(${a.id},'account')">✏️</button><button class="del-btn" style="opacity:1" onclick="delAccount(${a.id})">✕</button></div></div>`).join('');if(at2)at2.style.display='flex';if(atv)atv.textContent=ta.toLocaleString('cs-CZ')+' Kč';}}
-  // cash
-  if(!S.cash)S.cash=[];const tc=(S.cash||[]).reduce((s,c)=>s+c.amount,0);
+  if(al){if(!sortedAccounts.length){al.innerHTML='<div class="empty"><div class="empty-ico">🏦</div>Přidej stav účtu</div>';if(at2)at2.style.display='none';}
+  else{al.innerHTML=sortedAccounts.map(a=>`<div class="wallet-row"><span class="wallet-name"><span class="wallet-ico">${a.icon}</span>${a.name}<span style="font-size:10px;color:var(--text3);margin-left:6px;">${fmtC(a.date||new Date(a.id).toISOString())}</span></span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt" style="color:var(--blue)">${a.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditWallet(${a.id},'account')">✏️</button><button class="del-btn" style="opacity:1" onclick="delAccount(${a.id})">✕</button></div></div>`).join('');if(at2)at2.style.display='flex';if(atv)atv.textContent=ta.toLocaleString('cs-CZ')+' Kč';}}
+  // Hotovost
+  if(!S.cash)S.cash=[];
   const cl=g('cash-list'),ct=g('cash-total'),ctv=g('cash-total-val');
-  if(cl){if(!S.cash.length){cl.innerHTML='<div class="empty"><div class="empty-ico">💵</div>Přidej hotovost</div>';if(ct)ct.style.display='none';}
-  else{cl.innerHTML=S.cash.map(c=>`<div class="wallet-row"><span class="wallet-name">💵 ${c.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt" style="color:var(--amber)">${c.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditCash(${c.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delCash(${c.id})">✕</button></div></div>`).join('');if(ct)ct.style.display='flex';if(ctv)ctv.textContent=tc.toLocaleString('cs-CZ')+' Kč';}}
+  if(cl){if(!sortedCash.length){cl.innerHTML='<div class="empty"><div class="empty-ico">💵</div>Přidej hotovost</div>';if(ct)ct.style.display='none';}
+  else{cl.innerHTML=sortedCash.map(c=>`<div class="wallet-row"><span class="wallet-name">💵 ${c.name}<span style="font-size:10px;color:var(--text3);margin-left:6px;">${fmtC(c.date||new Date(c.id).toISOString())}</span></span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt" style="color:var(--amber)">${c.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditCash(${c.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delCash(${c.id})">✕</button></div></div>`).join('');if(ct)ct.style.display='flex';if(ctv)ctv.textContent=tc.toLocaleString('cs-CZ')+' Kč';}}
+  // V čem mám peníze
   const wl=g('wallet-list'),wt=g('wallet-total'),wtv=g('wallet-total-val');
-  if(wl){if(!S.wallet.length){wl.innerHTML='<div class="empty"><div class="empty-ico">💰</div>Přidej kde máš peníze</div>';if(wt)wt.style.display='none';}
-  else{wl.innerHTML=S.wallet.map(w=>`<div class="wallet-row"><span class="wallet-name"><span class="wallet-ico">${w.icon}</span>${w.name}</span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt">${w.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditWallet(${w.id},'wallet')">✏️</button><button class="del-btn" style="opacity:1" onclick="delWallet(${w.id})">✕</button></div></div>`).join('');if(wt)wt.style.display='flex';if(wtv)wtv.textContent=tw.toLocaleString('cs-CZ')+' Kč';}}
-  if(g('ov-i'))g('ov-i').textContent=ti.toLocaleString('cs-CZ')+' Kč';
+  if(wl){if(!sortedWallet.length){wl.innerHTML='<div class="empty"><div class="empty-ico">💰</div>Přidej kde máš peníze</div>';if(wt)wt.style.display='none';}
+  else{wl.innerHTML=sortedWallet.map(w=>`<div class="wallet-row"><span class="wallet-name"><span class="wallet-ico">${w.icon}</span>${w.name}<span style="font-size:10px;color:var(--text3);margin-left:6px;">${fmtC(w.date||new Date(w.id).toISOString())}</span></span><div style="display:flex;gap:6px;align-items:center"><span class="wallet-amt">${w.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:14px" onclick="openEditWallet(${w.id},'wallet')">✏️</button><button class="del-btn" style="opacity:1" onclick="delWallet(${w.id})">✕</button></div></div>`).join('');if(wt)wt.style.display='flex';if(wtv)wtv.textContent=tw.toLocaleString('cs-CZ')+' Kč';}}
+  // Overview metrics — K dispozici = účty+hotovost
+  if(g('ov-i'))g('ov-i').textContent=kdispo.toLocaleString('cs-CZ')+' Kč';
   if(g('ov-e'))g('ov-e').textContent=te.toLocaleString('cs-CZ')+' Kč';
 }
 function addNote(btn){if(btn&&event)addRipple(btn,event);const t=document.getElementById('ni-title').value.trim();const c=document.getElementById('ni-content').value.trim();if(!t)return;S.notes.unshift({id:Date.now(),title:t,content:c,date:new Date().toISOString()});save();renderAll();closeM('m-note');document.getElementById('ni-title').value='';document.getElementById('ni-content').value='';}
@@ -988,7 +1154,9 @@ function saveEditNote(){const id=parseInt(document.getElementById('en-id').value
 function renderNotes(){const el=document.getElementById('ngrid');if(!S.notes.length){el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">📭</div>Žádné poznámky</div>';return;}el.innerHTML=S.notes.map(n=>`<div class="note-c"><div class="note-t">${n.title}<div style="display:flex;gap:4px"><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditNote(${n.id})">✏️</button><button class="del-btn" onclick="delNote(${n.id})">✕</button></div></div><div class="note-p">${n.content||'<em>Prázdná</em>'}</div><div class="note-d">${new Date(n.date).toLocaleDateString('cs-CZ')}</div></div>`).join('');}
 function addLink(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('li-name').value.trim();let u=document.getElementById('li-url').value.trim();const ic=document.getElementById('li-ico').value.trim()||'🔗';if(!n||!u)return;if(!u.startsWith('http'))u='https://'+u;S.links.unshift({id:Date.now(),name:n,url:u,icon:ic});save();renderAll();closeM('m-link');document.getElementById('li-name').value='';document.getElementById('li-url').value='';document.getElementById('li-ico').value='';}
 function delLink(id){S.links=S.links.filter(x=>x.id!==id);save();renderAll();}
-function renderLinks(){const el=document.getElementById('lgrid');if(!S.links.length){el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">🔗</div>Žádné odkazy</div>';return;}el.innerHTML=S.links.map(l=>`<div class="lnk-c" onclick="window.open('${l.url}','_blank')"><div class="lnk-icon">${l.icon}</div><div class="lnk-name">${l.name}</div><div class="lnk-url">${l.url.replace(/https?:\/\//,'').split('/')[0]}</div><button class="del-btn lnk-del" onclick="event.stopPropagation();delLink(${l.id})">✕</button></div>`).join('');}
+function renderLinks(){const el=document.getElementById('lgrid');if(!S.links.length){el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">🔗</div>Žádné odkazy</div>';return;}el.innerHTML=S.links.map(l=>`<div class="lnk-c" onclick="window.open('${l.url}','_blank')"><div class="lnk-icon">${l.icon}</div><div class="lnk-name">${l.name}</div><div class="lnk-url">${l.url.replace(/https?:\/\//,'').split('/')[0]}</div><button class="del-btn lnk-del" onclick="event.stopPropagation();openEditLink(${l.id})">✏️</button><button class="del-btn lnk-del" style="right:28px;" onclick="event.stopPropagation();delLink(${l.id})">✕</button></div>`).join('');}
+function openEditLink(id){const l=S.links.find(x=>x.id===id);if(!l)return;document.getElementById('el-id').value=id;document.getElementById('el-name').value=l.name;document.getElementById('el-url').value=l.url;document.getElementById('el-ico').value=l.icon||'🔗';openM('m-edit-link');}
+function saveEditLink(){const id=parseInt(document.getElementById('el-id').value);const l=S.links.find(x=>x.id===id);if(!l)return;let u=document.getElementById('el-url').value.trim();if(!u.startsWith('http'))u='https://'+u;l.name=document.getElementById('el-name').value.trim()||l.name;l.url=u;l.icon=document.getElementById('el-ico').value.trim()||'🔗';save();renderAll();closeM('m-edit-link');}
 function addCalEvent(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('ci-name').value.trim();const d=document.getElementById('ci-date').value;const c=document.getElementById('ci-color').value;if(!n||!d)return;S.events.unshift({id:Date.now(),name:n,date:d,color:c});save();renderAll();closeM('m-cal');document.getElementById('ci-name').value='';document.getElementById('ci-date').value='';}
 function delCalEvent(id){S.events=S.events.filter(x=>x.id!==id);save();renderAll();}
 function renderCalendar(){const now=new Date(),year=now.getFullYear(),month=now.getMonth();const firstDay=new Date(year,month,1).getDay(),dim=new Date(year,month+1,0).getDate();const mN=['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];const dN=['Po','Út','St','Čt','Pá','So','Ne'];const evDays=new Set(S.events.filter(e=>{const d=new Date(e.date);return d.getMonth()===month&&d.getFullYear()===year;}).map(e=>new Date(e.date).getDate()));let h=`<div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;margin-bottom:8px;">${mN[month]} ${year}</div><div class="cal-grid">`;dN.forEach(d=>h+=`<div class="cal-head">${d}</div>`);const off=firstDay===0?6:firstDay-1;for(let i=0;i<off;i++)h+=`<div class="cal-day other-month"></div>`;for(let d=1;d<=dim;d++)h+=`<div class="cal-day ${d===now.getDate()?'today':''} ${evDays.has(d)?'has-event':''}">${d}</div>`;h+='</div>';document.getElementById('cal-grid-wrap').innerHTML=h;const sorted=[...S.events].sort((a,b)=>new Date(a.date)-new Date(b.date));document.getElementById('cal-events-list').innerHTML=sorted.length?sorted.map(e=>`<div class="cal-event"><div class="cal-event-dot" style="background:${e.color};box-shadow:0 0 7px ${e.color}"></div><div class="cal-event-info"><div class="cal-event-title">${e.name}</div><div class="cal-event-date">${new Date(e.date).toLocaleDateString('cs-CZ')} ${new Date(e.date).toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})}</div></div><button class="del-btn" onclick="delCalEvent(${e.id})">✕</button></div>`).join(''):'<div class="empty"><div class="empty-ico">📅</div>Žádné události</div>';}
@@ -1057,7 +1225,8 @@ function renderMeetings(){
 }
 const pSL={active:'Aktivní',paused:'Pozastavený',done:'Dokončený'};
 const pSC={active:'ps-active',paused:'ps-paused',done:'ps-done'};
-function addProject(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('pi-name').value.trim();if(!n)return;S.projects.unshift({id:Date.now(),name:n,desc:document.getElementById('pi-desc').value.trim(),status:document.getElementById('pi-status').value,progress:Math.min(100,Math.max(0,parseInt(document.getElementById('pi-progress').value)||0)),color:document.getElementById('pi-color').value,date:new Date().toISOString()});save();renderAll();closeM('m-proj');['pi-name','pi-desc','pi-progress'].forEach(id=>document.getElementById(id).value='');}
+function openProjM(type){document.getElementById('pi-type').value=type;document.getElementById('proj-mtitle').textContent=type==='contract'?'📋 Nová zakázka':'🚀 Nový projekt';openM('m-proj');}
+function addProject(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('pi-name').value.trim();if(!n)return;const type=document.getElementById('pi-type').value||'project';S.projects.unshift({id:Date.now(),name:n,desc:document.getElementById('pi-desc').value.trim(),status:document.getElementById('pi-status').value,progress:Math.min(100,Math.max(0,parseInt(document.getElementById('pi-progress').value)||0)),color:document.getElementById('pi-color').value,amount:parseFloat(document.getElementById('pi-amount').value)||0,projType:type,date:new Date().toISOString()});save();renderAll();closeM('m-proj');['pi-name','pi-desc','pi-progress','pi-amount'].forEach(id=>document.getElementById(id).value='');}
 function delProject(id){S.projects=S.projects.filter(x=>x.id!==id);save();renderAll();}
 function openEditProject(id){
   const p=S.projects.find(x=>x.id===id);if(!p)return;
@@ -1066,6 +1235,8 @@ function openEditProject(id){
   document.getElementById('eproj-desc').value=p.desc||'';
   document.getElementById('eproj-status').value=p.status||'active';
   document.getElementById('eproj-progress').value=p.progress||0;
+  document.getElementById('eproj-amount').value=p.amount||0;
+  document.getElementById('eproj-type').value=p.projType||'project';
   document.getElementById('eproj-color').value=p.color||'#8b5cf6';
   openM('m-edit-proj');
 }
@@ -1076,13 +1247,15 @@ function saveEditProject(){
   p.desc=document.getElementById('eproj-desc').value.trim();
   p.status=document.getElementById('eproj-status').value;
   p.progress=Math.min(100,Math.max(0,parseInt(document.getElementById('eproj-progress').value)||0));
+  p.amount=parseFloat(document.getElementById('eproj-amount').value)||0;
+  p.projType=document.getElementById('eproj-type').value||'project';
   p.color=document.getElementById('eproj-color').value;
   save();renderAll();closeM('m-edit-proj');
 }
 function renderProjects(){
-  const el=document.getElementById('proj-grid');
-  if(!S.projects.length){el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">🚀</div>Žádné projekty</div>';return;}
-  el.innerHTML=S.projects.map(p=>`<div class="proj-c" style="border-top:3px solid ${p.color}">
+  const contracts=S.projects.filter(p=>p.projType==='contract');
+  const projects=S.projects.filter(p=>p.projType!=='contract');
+  const projHTML=(p)=>`<div class="proj-c" style="border-top:3px solid ${p.color}">
     <div class="proj-top">
       <div class="proj-name">${p.name}</div>
       <div style="display:flex;gap:5px;align-items:center">
@@ -1092,10 +1265,18 @@ function renderProjects(){
       </div>
     </div>
     ${p.desc?`<div class="proj-desc">${p.desc}</div>`:''}
+    ${p.amount?`<div style="font-size:12px;color:var(--purple);font-weight:600;margin-bottom:6px;">💰 ${p.amount.toLocaleString('cs-CZ')} Kč</div>`:''}
     <div class="proj-bar-lbl"><span>Postup</span><span>${p.progress}%</span></div>
     <div class="proj-bar-track"><div class="proj-bar-fill" style="width:${p.progress}%;background:${p.color}"></div></div>
     <div class="proj-footer"><span>${new Date(p.date).toLocaleDateString('cs-CZ')}</span></div>
-  </div>`).join('');
+  </div>`;
+  const cEl=document.getElementById('proj-grid-contract');
+  const pEl=document.getElementById('proj-grid-project');
+  if(cEl)cEl.innerHTML=contracts.length?contracts.map(projHTML).join(''):'<div class="empty" style="grid-column:1/-1"><div class="empty-ico">📋</div>Žádné zakázky</div>';
+  if(pEl)pEl.innerHTML=projects.length?projects.map(projHTML).join(''):'<div class="empty" style="grid-column:1/-1"><div class="empty-ico">🚀</div>Žádné projekty</div>';
+  const ct=document.getElementById('contract-total'),ctv=document.getElementById('contract-total-val');
+  const totalC=contracts.reduce((s,p)=>s+(p.amount||0),0);
+  if(ct){ct.style.display=contracts.length?'flex':'none';if(ctv)ctv.textContent=totalC.toLocaleString('cs-CZ')+' Kč';}
 }
 function setupWeek(){const from=document.getElementById('wi-from').value;const to=document.getElementById('wi-to').value;if(!from||!to)return;S.currentWeek={from,to,tasks:[]};save();renderAll();closeM('m-week-setup');}
 function addWeekTask(){
@@ -1242,10 +1423,13 @@ function renderOverview(){
   s('ov-stat-total',`${all.filter(t=>t.done).length} z ${all.length} hotových`);
   const ti=S.finance.filter(f=>f.type==='income').reduce((s,f)=>s+f.amount,0);
   const te=S.finance.filter(f=>f.type==='expense').reduce((s,f)=>s+f.amount,0);
-  s('ov-i',ti.toLocaleString('cs-CZ')+' Kč');
+  const ta=S.accounts.reduce((s,a)=>s+a.amount,0);
+  const tc=(S.cash||[]).reduce((s,c)=>s+c.amount,0);
+  const kdispo=ta+tc;
+  s('ov-i',kdispo.toLocaleString('cs-CZ')+' Kč');
   s('ov-e',te.toLocaleString('cs-CZ')+' Kč');
-  const sorted=[...all].sort((a,b)=>{if(a.due&&b.due)return new Date(a.due)-new Date(b.due);if(a.due)return -1;if(b.due)return 1;return new Date(b.date)-new Date(a.date);});
-  const tlist=g('ov-tlist');if(tlist)tlist.innerHTML=sorted.length?sorted.map(t=>taskHTML(t,true)).join(''):'<div class="empty"><div class="empty-ico">📭</div>Žádné úkoly — přidej první</div>';
+  const sorted=[...all].filter(t=>!t.done).sort((a,b)=>{if(a.due&&b.due)return new Date(a.due)-new Date(b.due);if(a.due)return -1;if(b.due)return 1;return new Date(b.date)-new Date(a.date);});
+  const tlist=g('ov-tlist');if(tlist)tlist.innerHTML=sorted.length?sorted.map(t=>taskHTML(t,true)).join(''):'<div class="empty"><div class="empty-ico">✅</div>Žádné aktivní úkoly</div>';
 
   // urgent panel
   const urgTasks=S.tasks.filter(t=>isUrgent(t)&&!t.done);
@@ -1276,13 +1460,17 @@ function renderOverview(){
 function renderAll(){renderOverview();renderUrgent();renderTasks();renderFinance();renderNotes();renderLinks();renderCalendar();renderMeetings();renderProjects();renderWeekly();renderInteresting();}
 function spawnParticles(){const colors=['rgba(139,92,246,0.7)','rgba(236,72,153,0.6)','rgba(20,184,166,0.5)','rgba(245,158,11,0.5)'];for(let i=0;i<14;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*3+1;p.style.cssText=`left:${Math.random()*100}%;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${8+Math.random()*14}s;animation-delay:-${Math.random()*12}s;box-shadow:0 0 6px ${colors[Math.floor(Math.random()*colors.length)]}`;document.body.appendChild(p);}}
 // ═══ CASH ═══
-function addCash(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('ci2-name').value.trim();const a=parseFloat(document.getElementById('ci2-amt').value);if(!n||!a)return;if(!S.cash)S.cash=[];S.cash.unshift({id:Date.now(),name:n,amount:a});save();renderAll();closeM('m-cash');document.getElementById('ci2-name').value='';document.getElementById('ci2-amt').value='';}
+function addCash(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('ci2-name').value.trim();const a=parseFloat(document.getElementById('ci2-amt').value);if(!n||!a)return;const dv=document.getElementById('ci2-date').value;const date=dv?new Date(dv).toISOString():new Date().toISOString();if(!S.cash)S.cash=[];S.cash.unshift({id:Date.now(),name:n,amount:a,date});save();renderAll();closeM('m-cash');document.getElementById('ci2-name').value='';document.getElementById('ci2-amt').value='';document.getElementById('ci2-date').value='';}
 function delCash(id){if(!S.cash)return;S.cash=S.cash.filter(x=>x.id!==id);save();renderAll();}
 function openEditCash(id){
   if(!S.cash)return;const c=S.cash.find(x=>x.id===id);if(!c)return;
   document.getElementById('ec-id').value=id;
   document.getElementById('ec-name').value=c.name;
   document.getElementById('ec-amt').value=c.amount;
+  document.getElementById('ec-date').value=c.date?c.date.substring(0,10):(new Date(c.id).toISOString().substring(0,10));
+  document.getElementById('ec-transfer-target').value='';
+  const mb=document.getElementById('ec-move-btn');
+  if(mb)mb.setAttribute('onclick',`moveCash(${id})`);
   openM('m-edit-cash');
 }
 function saveEditCash(){
@@ -1291,6 +1479,7 @@ function saveEditCash(){
   const c=S.cash.find(x=>x.id===id);if(!c)return;
   c.name=document.getElementById('ec-name').value.trim()||c.name;
   c.amount=parseFloat(document.getElementById('ec-amt').value)||c.amount;
+  const dv=document.getElementById('ec-date').value;if(dv)c.date=new Date(dv).toISOString();
   save();renderAll();closeM('m-edit-cash');
 }
 function addInteresting(btn){if(btn&&event)addRipple(btn,event);const t=document.getElementById('ii-title').value.trim();const c=document.getElementById('ii-content').value.trim();const s=document.getElementById('ii-source').value.trim();if(!t)return;if(!S.interesting)S.interesting=[];S.interesting.unshift({id:Date.now(),title:t,content:c,source:s,date:new Date().toISOString()});save();renderAll();closeM('m-interesting');document.getElementById('ii-title').value='';document.getElementById('ii-content').value='';document.getElementById('ii-source').value='';}
