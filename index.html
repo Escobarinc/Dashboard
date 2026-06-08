@@ -343,7 +343,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
 .empty{text-align:center;padding:28px 16px;color:var(--text3);font-size:13px;}
 .empty-ico{font-size:28px;margin-bottom:7px;opacity:0.28;animation:bounce 2s ease-in-out infinite;}
 .scroll-inner{max-height:calc(100vh - 260px);overflow-y:auto;padding-right:2px;scrollbar-width:none;}
-.scroll-inner::-webkit-scrollbar{width:0;background:transparent;}
+*{scrollbar-width:none;-ms-overflow-style:none;}*::-webkit-scrollbar{display:none;width:0;background:transparent;}
 .particle{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:particleFloat linear infinite;}
 @keyframes particleFloat{0%{opacity:0;transform:translateY(100vh);}10%{opacity:1;}90%{opacity:1;}100%{opacity:0;transform:translateY(-100px);}}
 
@@ -575,11 +575,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
         <div><div style="font-size:11px;color:var(--text2);font-weight:500;">K dispozici</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">Hotovost + Na účtu</div></div>
         <div style="font-family:'Inter',sans-serif;font-size:19px;font-weight:800;color:var(--teal)" id="fin-kdispo-val">0 Kč</div>
       </div>
-      <!-- 2. Celkový zůstatek -->
-      <div class="bal-bar" style="margin-bottom:12px;"><div><div class="bal-lbl">Celkový zůstatek (příjmy − výdaje)</div></div><div class="bal-val" id="bal">0 Kč</div></div>
-      <!-- 3. Celkem k dispozici -->
+      <!-- 2. Výdaje -->
+      <div class="bal-bar" style="margin-bottom:12px;"><div><div class="bal-lbl">Výdaje</div></div><div class="bal-val" id="bal" style="color:var(--danger)">0 Kč</div></div>
+      <!-- 3. Celkem -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(20,184,166,0.04);border:1px solid rgba(20,184,166,0.12);border-radius:13px;margin-bottom:12px;">
-        <div><div style="font-size:11px;color:var(--text2);font-weight:500;">Celkem k dispozici</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">Zůstatek + Účty + Hotovost + V čem mám peníze</div></div>
+        <div><div style="font-size:11px;color:var(--text2);font-weight:500;">Celkem</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">Na účtu + Hotovost + V čem mám peníze</div></div>
         <div style="font-family:'Inter',sans-serif;font-size:19px;font-weight:800;color:var(--teal)" id="fin-super-val">0 Kč</div>
       </div>
       <!-- K dispozici + Výdaje -->
@@ -597,14 +597,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
             <input type="date" id="exp-to" class="mi" style="flex:1;min-width:100px;font-size:11px;padding:5px 8px;" onchange="renderFinance()">
             <button class="btn" style="font-size:10px;padding:4px 8px;" onclick="document.getElementById('exp-from').value='';document.getElementById('exp-to').value='';renderFinance();">✕</button>
           </div>
-          <div id="elist" style="max-height:calc(5 * 44px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(139,92,246,0.2) transparent;"></div>
+          <div id="elist" style="max-height:calc(5 * 44px);overflow-y:auto;scrollbar-width:none;"></div>
           <div class="wallet-total" style="display:flex;margin-top:8px;"><span class="wallet-total-lbl">Celkem výdaje</span><span class="wallet-total-val" id="exp-total-lbl" style="color:var(--danger)">0 Kč</span></div>
         </div>
       </div>
       <!-- Na účtu + Hotovost + V čem mám peníze -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
-        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot db"></div>Na účtu</div><button class="btn" onclick="openM('m-account')">+ Přidat</button></div><div id="account-list" style="max-height:130px;overflow-y:auto;scrollbar-width:none;"></div><div class="wallet-total" id="account-total" style="display:none"><span class="wallet-total-lbl">Celkem na účtech</span><span class="wallet-total-val" id="account-total-val" style="color:var(--blue)">0 Kč</span></div></div>
-        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot" style="background:var(--amber);box-shadow:0 0 8px var(--amber)"></div>Hotovost</div><button class="btn" onclick="openM('m-cash')">+ Přidat</button></div><div id="cash-list" style="max-height:130px;overflow-y:auto;scrollbar-width:none;"></div><div class="wallet-total" id="cash-total" style="display:none"><span class="wallet-total-lbl">Celkem hotovost</span><span class="wallet-total-val" id="cash-total-val" style="color:var(--amber)">0 Kč</span></div></div>
+        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot db"></div>Na účtu</div><button class="btn" onclick="openM('m-account')">+ Přidat</button></div><div id="account-list" style="max-height:160px;overflow-y:auto;scrollbar-width:none;"></div><div class="wallet-total" id="account-total" style="display:none"><span class="wallet-total-lbl">Celkem na účtech</span><span class="wallet-total-val" id="account-total-val" style="color:var(--blue)">0 Kč</span></div></div>
+        <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot" style="background:var(--amber);box-shadow:0 0 8px var(--amber)"></div>Hotovost</div><button class="btn" onclick="openM('m-cash')">+ Přidat</button></div><div id="cash-list" style="max-height:160px;overflow-y:auto;scrollbar-width:none;"></div><div class="wallet-total" id="cash-total" style="display:none"><span class="wallet-total-lbl">Celkem hotovost</span><span class="wallet-total-val" id="cash-total-val" style="color:var(--amber)">0 Kč</span></div></div>
         <div class="card" style="margin-bottom:0"><div class="card-hd"><div class="card-title"><div class="dot dt"></div>V čem mám peníze</div><button class="btn" onclick="openM('m-wallet')">+ Přidat</button></div><div id="wallet-list"></div><div class="wallet-total" id="wallet-total" style="display:none"><span class="wallet-total-lbl">Celkem uloženo</span><span class="wallet-total-val" id="wallet-total-val">0 Kč</span></div></div>
       </div>
       <!-- Dlouhodobé dluhy -->
@@ -654,7 +654,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter'
     <div class="ma"><button class="btn" onclick="closeM('m-task')">Zrušit</button><button class="btn btn-primary" onclick="addTask(this)">Přidat úkol</button></div>
   </div>
 </div>
-<div class="ov-modal" id="m-fin"><div class="modal"><div class="modal-title" id="fin-mtitle">💚 Nový příjem</div><div class="mf"><label class="ml">Popis</label><input class="mi" id="fi-name" placeholder="Název položky"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="fi-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="fi-date"></div><div class="ma"><button class="btn" onclick="closeM('m-fin')">Zrušit</button><button class="btn btn-primary" onclick="addFin(this)">Přidat</button></div></div></div>
+<div class="ov-modal" id="m-fin"><div class="modal"><div class="modal-title" id="fin-mtitle">💚 Nový příjem</div><div class="mf"><label class="ml">Popis</label><input class="mi" id="fi-name" placeholder="Název položky"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="fi-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="fi-date"></div><div class="mf" id="fi-source-row" style="display:none"><label class="ml">Odečíst z</label><select class="mi" id="fi-source"><option value="">— nevybráno (jen evidence) —</option><option value="account">Na účtu</option><option value="cash">Hotovost</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-fin')">Zrušit</button><button class="btn btn-primary" onclick="addFin(this)">Přidat</button></div></div></div>
 <div class="ov-modal" id="m-wallet"><div class="modal"><div class="modal-title">💰 V čem mám peníze</div><div class="mf"><label class="ml">Název</label><input class="mi" id="wi-name" placeholder="Hotovost, Revolut..."></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="wi-ico" placeholder="💰" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="wi-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="wi-date"></div><div class="ma"><button class="btn" onclick="closeM('m-wallet')">Zrušit</button><button class="btn btn-primary" onclick="addWallet(this)">Přidat</button></div></div></div>
 <div class="ov-modal" id="m-account"><div class="modal"><div class="modal-title">🏦 Na účtě</div><div class="mf"><label class="ml">Název účtu</label><input class="mi" id="ai-name" placeholder="Raiffeisen, Spořicí..."></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="ai-ico" placeholder="🏦" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Stav (Kč)</label><input class="mi" type="number" id="ai-amt" placeholder="0"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="ai-date"></div><div class="ma"><button class="btn" onclick="closeM('m-account')">Zrušit</button><button class="btn btn-primary" onclick="addAccount(this)">Přidat</button></div></div></div>
 <div class="ov-modal" id="m-edit-wallet"><div class="modal"><div class="modal-title">✏️ Upravit položku</div><input type="hidden" id="ew-id"><input type="hidden" id="ew-type"><div class="mf"><label class="ml">Název</label><input class="mi" id="ew-name"></div><div class="mf"><label class="ml">Ikona</label><input class="mi" id="ew-ico" maxlength="2" style="font-size:18px;text-align:center;"></div><div class="mf"><label class="ml">Částka (Kč)</label><input class="mi" type="number" id="ew-amt"></div><div class="mf"><label class="ml">Datum</label><input class="mi" type="date" id="ew-date"></div><div class="mf" id="ew-transfer-row"><label class="ml">Přesunout do</label><select class="mi" id="ew-transfer-target"><option value="">— nevybráno —</option><option value="income">K dispozici</option><option value="account">Na účet</option><option value="cash">Hotovost</option></select></div><div class="ma"><button class="btn" onclick="closeM('m-edit-wallet')">Zrušit</button><button class="btn" style="background:rgba(16,185,129,0.14);border-color:rgba(16,185,129,0.28);color:#6ee7b7" onclick="moveWallet()">→ Přesunout</button><button class="btn btn-primary" onclick="saveEditWallet()">Uložit</button></div></div></div>
@@ -862,7 +862,7 @@ function nav(id,el){
 }
 function openM(id){document.getElementById(id).classList.add('open');}
 function closeM(id){document.getElementById(id).classList.remove('open');}
-function openFinM(t){finType=t;document.getElementById('fin-mtitle').textContent=(t==='income'?'💚 Nový příjem':'💸 Nový výdaj');openM('m-fin');}
+function openFinM(t){finType=t;document.getElementById('fin-mtitle').textContent=(t==='income'?'💚 Nový příjem':'💸 Nový výdaj');const sr=document.getElementById('fi-source-row');if(sr)sr.style.display=t==='expense'?'block':'none';if(t==='income'){const s=document.getElementById('fi-source');if(s)s.value='';}openM('m-fin');}
 function quickAdd(btn){
   if(btn&&event)addRipple(btn,event);
   const a=document.querySelector('.section.active').id;
@@ -997,7 +997,7 @@ function renderUrgent(){
 }
 
 // ═══ FINANCE ═══
-function addFin(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('fi-name').value.trim();const a=parseFloat(document.getElementById('fi-amt').value);if(!n||!a)return;const dv=document.getElementById('fi-date').value;const date=dv?(new Date(dv).toISOString()):new Date().toISOString();S.finance.unshift({id:Date.now(),name:n,amount:a,type:finType,date});save();renderAll();closeM('m-fin');document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';document.getElementById('fi-date').value='';}
+function addFin(btn){if(btn&&event)addRipple(btn,event);const n=document.getElementById('fi-name').value.trim();const a=parseFloat(document.getElementById('fi-amt').value);if(!n||!a)return;const dv=document.getElementById('fi-date').value;const date=dv?(new Date(dv).toISOString()):new Date().toISOString();const source=finType==='expense'?(document.getElementById('fi-source').value||''):'';if(finType==='expense'&&source==='account'&&S.accounts.length){S.accounts[0].amount=Math.max(0,S.accounts[0].amount-a);}else if(finType==='expense'&&source==='cash'&&S.cash&&S.cash.length){S.cash[0].amount=Math.max(0,S.cash[0].amount-a);}S.finance.unshift({id:Date.now(),name:n,amount:a,type:finType,date,source});save();renderAll();closeM('m-fin');document.getElementById('fi-name').value='';document.getElementById('fi-amt').value='';document.getElementById('fi-date').value='';document.getElementById('fi-source').value='';}
 function delFin(id){S.finance=S.finance.filter(x=>x.id!==id);save();renderAll();}
 function openEditFin(id){const f=S.finance.find(x=>x.id===id);if(!f)return;document.getElementById('ef-id').value=id;document.getElementById('ef-name').value=f.name;document.getElementById('ef-amt').value=f.amount;document.getElementById('ef-date').value=f.date?f.date.substring(0,10):'';document.getElementById('ef-transfer-target').value='';openM('m-edit-fin');}
 function saveEditFin(){const id=parseInt(document.getElementById('ef-id').value);const f=S.finance.find(x=>x.id===id);if(!f)return;const n=document.getElementById('ef-name').value.trim();const a=parseFloat(document.getElementById('ef-amt').value);if(!n||!a)return;f.name=n;f.amount=a;const dv=document.getElementById('ef-date').value;if(dv)f.date=new Date(dv).toISOString();save();renderAll();closeM('m-edit-fin');}
@@ -1098,19 +1098,20 @@ function renderFinance(){
   if(!S.debts)S.debts=[];
   const byDate=(a,b)=>new Date(b.date||b.id)-new Date(a.date||a.id);
   const inc=S.finance.filter(f=>f.type==='income').sort(byDate),exp=S.finance.filter(f=>f.type==='expense').sort(byDate);
+  // Výdaje se zdrojem (účet/hotovost) jsou již odečteny fyzicky — nezapočítávat do zůstatku
   const ti=inc.reduce((s,f)=>s+f.amount,0),te=exp.reduce((s,f)=>s+f.amount,0),b=ti-te;
   const sortedAccounts=[...S.accounts].sort(byDate),sortedCash=[...(S.cash||[])].sort(byDate),sortedWallet=[...S.wallet].sort(byDate),sortedDebts=[...S.debts].sort(byDate);
   const tw=S.wallet.reduce((s,w)=>s+w.amount,0),ta=S.accounts.reduce((s,a)=>s+a.amount,0);
   const tc=(S.cash||[]).reduce((s,c)=>s+c.amount,0);
   const g=id=>document.getElementById(id);
-  // 1. K dispozici banner (účty+hotovost)
+  // 1. K dispozici (účty+hotovost)
   const kdispo=ta+tc;
   if(g('fin-kdispo-val')){g('fin-kdispo-val').textContent=kdispo.toLocaleString('cs-CZ')+' Kč';g('fin-kdispo-val').style.color=kdispo>=0?'var(--teal)':'var(--danger)';}
-  // 2. Zůstatek
-  if(g('bal')){g('bal').textContent=b.toLocaleString('cs-CZ')+' Kč';g('bal').style.color=b>=0?'var(--success)':'var(--danger)';}
-  // 3. Celkem k dispozici (zůstatek+účty+hotovost+wallet)
-  const st=b+tw+ta+tc;
-  if(g('fin-super-val')){g('fin-super-val').textContent=st.toLocaleString('cs-CZ')+' Kč';g('fin-super-val').style.color=st>=0?'var(--teal)':'var(--danger)';}
+  // 2. Výdaje (součet všech výdajů)
+  if(g('bal')){g('bal').textContent=te.toLocaleString('cs-CZ')+' Kč';g('bal').style.color='var(--danger)';}
+  // 3. Celkem = účty + hotovost + wallet
+  const celkem=ta+tc+tw;
+  if(g('fin-super-val')){g('fin-super-val').textContent=celkem.toLocaleString('cs-CZ')+' Kč';g('fin-super-val').style.color='var(--teal)';}
   // Dluhy
   const totalDebt=S.debts.reduce((s,d)=>s+d.amount,0);
   if(g('fin-debt-val'))g('fin-debt-val').textContent=totalDebt.toLocaleString('cs-CZ')+' Kč';
@@ -1128,7 +1129,7 @@ function renderFinance(){
   if(toV){const toD=new Date(toV);toD.setHours(23,59,59,999);filtExp=filtExp.filter(f=>new Date(f.date)<=toD);}
   const teFiltered=filtExp.reduce((s,f)=>s+f.amount,0);
   const rExp=g('elist');if(rExp){if(!filtExp.length){rExp.innerHTML='<div class="empty"><div class="empty-ico">📭</div>Žádné výdaje</div>';}
-  else{rExp.innerHTML=filtExp.map(f=>`<div class="fin-row"><span class="fin-cat">${f.name}<span style="font-size:10px;color:var(--text3);margin-left:6px;">${fmtC(f.date)}</span></span><div style="display:flex;align-items:center;gap:5px"><span class="fin-amt exp">-${f.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditFin(${f.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delFin(${f.id})">✕</button></div></div>`).join('');}}
+  else{rExp.innerHTML=filtExp.map(f=>`<div class="fin-row"><span class="fin-cat">${f.name}${f.source==='account'?'<span style="font-size:9px;margin-left:5px;color:var(--blue);background:rgba(59,130,246,0.12);padding:1px 5px;border-radius:4px;">účet</span>':f.source==='cash'?'<span style="font-size:9px;margin-left:5px;color:var(--amber);background:rgba(245,158,11,0.12);padding:1px 5px;border-radius:4px;">hotovost</span>':''}<span style="font-size:10px;color:var(--text3);margin-left:6px;">${fmtC(f.date)}</span></span><div style="display:flex;align-items:center;gap:5px"><span class="fin-amt exp">-${f.amount.toLocaleString('cs-CZ')} Kč</span><button class="del-btn" style="opacity:1;font-size:13px" onclick="openEditFin(${f.id})">✏️</button><button class="del-btn" style="opacity:1" onclick="delFin(${f.id})">✕</button></div></div>`).join('');}}
   if(g('exp-total-lbl'))g('exp-total-lbl').textContent=teFiltered.toLocaleString('cs-CZ')+' Kč';
   // Na účtu
   const al=g('account-list'),at2=g('account-total'),atv=g('account-total-val');
